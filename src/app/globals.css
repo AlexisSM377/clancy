@@ -8,7 +8,13 @@ html {
 
 body {
   background: #212121;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Martian Mono Variable", monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: rgba(255, 255, 255, 0.9);
+  }
 }
 
 @layer components {
