@@ -1,9 +1,38 @@
 export function Header() {
-    return (
-        <header>
-            <div>
-                <h1>Header</h1>
-            </div>
-        </header>
-    )
+  return (
+    <header className="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white border-b border-gray-200 text-sm py-4 dark:bg-neutral-800 dark:border-neutral-700">
+      <nav className="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          <a
+            className="flex-none font-semibold text-xl text-black focus:outline-none focus:opacity-80 dark:text-white"
+            href="#"
+            aria-label="Clancy"
+          >
+            Clancy
+          </a>
+        </div>
+        <div
+          id="hs-navbar-sticky-footer"
+          className="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block"
+          aria-labelledby="hs-navbar-sticky-footer-collapse"
+        >
+          <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
+            <a
+              className="font-medium text-blue-500 focus:outline-none"
+              href="#"
+              aria-current="page"
+            >
+              Ticket
+            </a>
+            <a
+              className="font-medium text-gray-600 hover:text-gray-400 focus:outline-none focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
+              href="#"
+            >
+              Blog
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+  );
 }

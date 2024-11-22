@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
+import { SessionProvider } from "next-auth/react";
 // Supports weights 100-800
-import '@fontsource-variable/martian-mono';
+import "@fontsource-variable/martian-mono";
 import "./globals.css";
-
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,9 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="flex flex-col h-full">
         <Header />
-        {children}
+        <main id="content" className="shrink-0">
+          <div className="max-w-[85rem] min-h-[40rem] mx-auto py-10 px-4 sm:px-6 lg:px-8">
+            <SessionProvider>{children}</SessionProvider>
+          </div>
+        </main>
         <Footer />
       </body>
     </html>
