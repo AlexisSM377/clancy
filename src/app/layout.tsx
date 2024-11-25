@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className="flex flex-col h-full">
         <Header />
         <main id="content" className="shrink-0">
-          <div className="max-w-[85rem] min-h-[40rem] mx-auto py-10 px-4 sm:px-6 lg:px-8">
+          <div>
             <SessionProvider>{children}</SessionProvider>
           </div>
         </main>

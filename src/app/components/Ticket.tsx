@@ -128,7 +128,7 @@ export default function Ticket({
                                         height='78'
                                     />
                                     <div>
-                                        <p className='text-xl font-bold'>{username}</p>
+                                        <p className='text-lg  font-bold '>{username}</p>
                                         <span className='block px-3 py-1 mt-1 text-xs font-semibold rounded-full w-max text-white/80 bg-black/10 uppercase'>
                                             The Clancy World Tour
                                         </span>
@@ -272,7 +272,7 @@ export default function Ticket({
                             target='_blank'
                             rel='nofollow'
                             className={cn(
-                                'flex items-center justify-self-end justify-end gap-2 p-5 font-bold text-white w-max hover:text-[#b9a3e3] transition-colors',
+                                'flex items-center justify-self-end justify-end gap-2 p-5 font-bold text-white w-max hover:text-[#FFD800] transition-colors',
                                 isSizeFixed
                                     ? 'text-base mx-0 pt-5 col-[1/3] row-[1/2] h-max py-0'
                                     : 'pt-0 text-md md:text-base mx-auto md:mx-0 md:pt-5 md:py-0 md:h-max md:row-[1/2] md:col-[1/3]'
@@ -303,7 +303,7 @@ const NotAvatarUser = ({ isSizeFixed }: { isSizeFixed: boolean }) => {
         >
             <div>
                 <p className='text-xl font-bold'>
-                    <span className='opacity-75 text-midu-primary'>#</span>theclancyworldtour
+                    <span className='opacity-75 text-top-primary'>#</span>theclancyworldtour
                 </p>
                 <span className='block text-sm font-normal w-max text-white/60'>
                     Twenty one Pilots

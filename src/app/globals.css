@@ -18,6 +18,18 @@ body {
 }
 
 @layer components {
+  .header-animate {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    animation: reduce-header linear both;
+    animation-timeline: scroll();
+    animation-range: 0 150px;
+  }
+}
+
+@layer components {
   .ticket-dash-border {
     background-image: linear-gradient(
       hsla(0, 0%, 100%, 0.2) 0%,
@@ -39,5 +51,28 @@ body {
     background-size: 1.125rem 0.0625rem;
     background-position: 0 0;
     background-repeat: repeat-x;
+  }
+}
+
+@keyframes reduce-header {
+  to {
+    box-shadow: 0 5px 50px -5px hsla(0, 0%, 100%, 0.1),
+      0 0 0 1px hsla(0, 0%, 100%, 0.1);
+    background: rgba(0, 0, 0, 0.3);
+    padding-block: 1rem;
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* Estilos generales para la imagen */
+img {
+  width: 100%;
+  height: auto;
+}
+
+/* Estilos específicos para dispositivos móviles */
+@media (max-width: 768px) {
+  img {
+    width: 150%; /* Ajusta este valor según tus necesidades */
   }
 }

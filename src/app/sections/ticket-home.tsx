@@ -34,7 +34,7 @@ export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
 
   return (
     <div>
-      <div className="block w-full h-full">
+      <div className="block w-full h-full px-4">
         <div className="flex items-center justify-center max-w-[700px] mx-auto mt-16 flex-0">
           <Container3D>
             <Ticket
@@ -47,7 +47,7 @@ export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
             />
           </Container3D>
         </div>
-        <div className="flex flex-col items-center justify-center gap-4 mx-auto mt-16 scale-90 md:flex-row sm:scale-100">
+        <div className="flex flex-col items-center justify-center gap-4 mx-auto scale-90 md:flex-row sm:scale-100 py-[80px]">
           {status === "authenticated" && (
             <button
               className="group relative h-12 w-72 overflow-hidden rounded-2xl bg-green-500 text-lg font-bold text-white"
