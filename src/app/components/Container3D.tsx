@@ -14,7 +14,7 @@ export const Container3D = ({ children }: Props) => {
         const mediaQuery = window.matchMedia('(max-width: 768px)')
         setIsMobile(mediaQuery.matches)
 
-        const handleMediaQueryChange = (e) => {
+        const handleMediaQueryChange = (e: { matches: boolean | ((prevState: boolean) => boolean) }) => {
             setIsMobile(e.matches)
         }
 
