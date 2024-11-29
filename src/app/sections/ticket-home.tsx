@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Container3D } from "../components/Container3D";
 import Ticket from "../components/Ticket";
 import { FLAVORS } from "../flavors/data";
-import { useRouter } from "next/navigation";
 import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 
@@ -14,7 +13,7 @@ interface TicketHomeProps {
 export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
   const { data: session, status } = useSession();
   const [flavor, setFlavor] = useState(
-    FLAVORS[initialFlavor] ?? FLAVORS.clancy
+    FLAVORS[initialFlavor] ?? FLAVORS.twentyonepilots
   );
 
   useEffect(() => {
