@@ -5,6 +5,7 @@ import Ticket from "../components/Ticket";
 import { FLAVORS } from "../flavors/data";
 import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface TicketHomeProps {
   initialFlavor?: string;
@@ -12,6 +13,7 @@ interface TicketHomeProps {
 
 export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
   const { data: session, status } = useSession();
+  const route = useRouter()
   const [flavor, setFlavor] = useState(
     FLAVORS[initialFlavor] ?? FLAVORS.twentyonepilots
   );
@@ -50,12 +52,10 @@ export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
           {status === "authenticated" && (
             <button
               className="group relative h-12 w-72 overflow-hidden rounded-2xl bg-green-500 text-lg font-bold text-white"
-              onClick={() => {
-                signOut();
-              }}
+              onClick={() => route.push("/ticket")}
             >
-              Logout
-              <div className="absolute inset-0 h-full w-full scale-0 rounded-2xl transition-all duration-300 group-hover:scale-100 group-hover:bg-white/30"></div>
+              Ver Ticket
+
             </button>
           )}
           {status === "unauthenticated" && (
