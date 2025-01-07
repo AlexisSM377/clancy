@@ -17,6 +17,23 @@ body {
   }
 }
 
+.hero-logo {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .hero-logo {
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-logo {
+    width: 60%;
+  }
+}
+
 @layer components {
   .header-animate {
     position: fixed;
