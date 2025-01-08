@@ -2,10 +2,10 @@
 interface Props {
     children: React.ReactNode
 }
-export const Background = ({ children }: Props) => {
+export const BackgroundTicket = ({ children }: Props) => {
     return (
         <div className="relative h-full">
-            <img src="/background.jpg" alt="background" className="absolute w-full h-full object-cover backgradient" />
+            <img src="/bg-ticket.jpg" alt="background" className="absolute w-full h-full object-cover" />
             <div className="relative z-50">{children}</div>
         </div>
     )

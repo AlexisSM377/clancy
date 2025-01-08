@@ -17,6 +17,26 @@ body {
   }
 }
 
+.hero-logo {
+  width: 100%;
+  height: auto;
+}
+
+.backgradient {
+  mask-image: linear-gradient(black 80%, transparent);
+}
+@media (max-width: 768px) {
+  .hero-logo {
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-logo {
+    width: 60%;
+  }
+}
+
 @layer components {
   .header-animate {
     position: fixed;
@@ -61,6 +81,70 @@ body {
     background: rgba(0, 0, 0, 0.3);
     padding-block: 1rem;
     backdrop-filter: blur(10px);
+  }
+}
+
+@layer components {
+  .ticket-premium-bg {
+    position: relative;
+    background-image: url(/background.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .ticket-premium-bg::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+    background: linear-gradient(to left bottom, #a172f750 0%, #a172f700 100%),
+      linear-gradient(to right top, #5bc4f450 0%, #a172f700 0%);
+    opacity: 0.5;
+    animation: animateGradientPremium 10s infinite alternate linear;
+  }
+
+  .ticket-premium-bg::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    inset: 0;
+    background: url(/img/tickets-effect/noise.png);
+    background-size: 50px 50px;
+    opacity: 0.8;
+  }
+
+  @keyframes animateGradientPremium {
+    0% {
+      opacity: 0.5;
+    }
+
+    25% {
+      opacity: 0.7;
+    }
+
+    50% {
+      opacity: 0.9;
+    }
+
+    75% {
+      opacity: 0.7;
+    }
+
+    100% {
+      opacity: 0.5;
+    }
+  }
+}
+
+@layer components {
+  .flavors-gradient-list {
+    mask: linear-gradient(to top, transparent, black 4rem);
+    -webkit-mask: linear-gradient(to top, transparent, black 4rem);
   }
 }
 

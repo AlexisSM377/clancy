@@ -90,14 +90,14 @@ export default function Ticket({
                     <div
                         key={username}
                         className={cn(
-                            '-rotate-12 sm:pl-12',
+                            '-rotate-12 sm:pl-20 sm:pt-2',
                             isSizeFixed
                                 ? 'absolute bottom-[20%] left-[25%] mb-0 h-[40%] w-auto block'
                                 : 'md:w-auto row-[2/3] mb-8 md:mb-0 left-0 mx-auto md:mx-0 h-32 md:h-[40%] relative flex justify-center w-full md:block bottom-0 md:left-[25%] md:bottom-[20%]  md:absolute'
                         )}
                     >
                         <Icon className='absolute w-auto h-full' />
-                        <Icon className='absolute w-auto h-full scale-150 blur-xl -z-10 opacity-80' key={`${username}-shadow`} />
+                        <Icon className='absolute w-auto h-full scale-150 blur-xl -z-10 opacity-90' key={`${username}-shadow`} />
                     </div>
                 }
                 <div
@@ -224,9 +224,34 @@ export default function Ticket({
                                         </div>
                                     ) : (
                                         <>
-                                            <div>
-                                                Desbloquear
-                                            </div>
+                                            {handleRemoveTrack != null && (
+                                                <div
+                                                    className={cn(
+                                                        'flex items-center justify-center w-12 h-12 p-2 border border-dashed rounded-lg opacity-20',
+                                                        isSizeFixed && 'hidden'
+                                                    )}
+                                                >
+                                                    <svg
+                                                        xmlns='http://www.w3.org/2000/svg'
+                                                        width='24'
+                                                        height='24'
+                                                        viewBox='0 0 24 24'
+                                                        fill='none'
+                                                        stroke='currentColor'
+                                                        strokeWidth='2'
+                                                        strokeLinecap='round'
+                                                        strokeLinejoin='round'
+                                                        className='w-6 h-6'
+                                                    >
+                                                        <path stroke='none' d='M0 0h24v24H0z' fill='none' />
+                                                        <path d='M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z' />
+                                                        <path d='M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
+                                                        <path d='M8 11v-4a4 4 0 1 1 8 0v4' />
+                                                    </svg>
+
+
+                                                </div>
+                                            )}
                                         </>
                                     )}
 
