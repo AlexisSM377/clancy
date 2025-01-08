@@ -35,7 +35,7 @@ export function PrincipalDate() {
     return (
         <section className="mt-14 mx-auto flex flex-col justify-center items-center text-center">
             <h2 className="uppercase text-3xl font-semibold">
-                20 de febrero de 2025 <span aria-hidden className="hidden md:inline mx-1">·</span>
+                20 de febrero de 2025 <span aria-hidden className="hidden md:inline mx-3">·</span>
                 <br aria-hidden className="block md:hidden" />
                 <span id="date-time"></span>
             </h2>

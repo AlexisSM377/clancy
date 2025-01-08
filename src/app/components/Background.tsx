@@ -5,7 +5,7 @@ interface Props {
 export const Background = ({ children }: Props) => {
     return (
         <div className="relative h-full">
-            <img src="/background.jpg" alt="background" className="absolute w-full h-full object-cover" />
+            <img src="/background.jpg" alt="background" className="absolute w-full h-full object-cover backgradient" />
             <div className="relative z-50">{children}</div>
         </div>
     )

@@ -22,6 +22,9 @@ body {
   height: auto;
 }
 
+.backgradient {
+  mask-image: linear-gradient(black 80%, transparent);
+}
 @media (max-width: 768px) {
   .hero-logo {
     width: 80%;
