@@ -160,3 +160,12 @@ img {
     width: 150%; /* Ajusta este valor según tus necesidades */
   }
 }
+
+.gallery {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 3rem;
+}
+.gallery__item img {
+  width: 100%;
+}

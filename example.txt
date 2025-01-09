@@ -32,3 +32,34 @@
         </div>
       </nav>
     </header>
+
+
+    import Gallery from 'react-grid-gallery';
+
+                const IMAGES = [
+                    {
+                        src: "path/to/image1.jpg",
+                        thumbnail: "path/to/image1_thumbnail.jpg",
+                        thumbnailWidth: 320,
+                        thumbnailHeight: 212,
+                        caption: "Image 1"
+                    },
+                    {
+                        src: "path/to/image2.jpg",
+                        thumbnail: "path/to/image2_thumbnail.jpg",
+                        thumbnailWidth: 320,
+                        thumbnailHeight: 212,
+                        caption: "Image 2"
+                    },
+                    // Add more images as needed
+                ];
+
+                export default function Page() {
+                    return (
+                        <div className="flex flex-col justify-center items-center pt-40 gap-9">
+                            <h1>Blog</h1>
+                            <p>Blog page content...</p>
+                            <Gallery images={IMAGES} />
+                        </div>
+                    );
+                }

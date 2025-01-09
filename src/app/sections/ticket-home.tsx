@@ -6,6 +6,9 @@ import { FLAVORS } from "../flavors/data";
 import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Button } from "../components/Button";
+import { DrumIcon } from "../components/icons/music";
+import { TicketIcon } from "../components/icons/ticket";
 
 interface TicketHomeProps {
   initialFlavor?: string;
@@ -50,17 +53,18 @@ export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
         </div>
         <div className="flex flex-col items-center justify-center gap-4 mx-auto scale-90 md:flex-row sm:scale-100 py-[80px]">
           {status === "authenticated" && (
-            <button
-              className="group relative h-12 w-72 overflow-hidden rounded-2xl bg-green-500 text-lg font-bold text-white"
+            <Button variant="secondary" type="button"
+              className="text-2xl py-5 px-5 gap-x-4 trasution duration-300 ease-in-out transform hover:scale-110"
               onClick={() => route.push("/ticket")}
             >
+              <TicketIcon />
               Ver Ticket
 
-            </button>
+            </Button>
           )}
           {status === "unauthenticated" && (
-            <button
-              className="group relative h-12 w-72 overflow-hidden rounded-2xl bg-green-500 text-lg font-bold text-white"
+            <Button variant="secondary" type="button"
+
               onClick={async () => {
                 await signIn("spotify", {
                   callbackUrl: "/ticket",
@@ -68,9 +72,11 @@ export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
                 });
               }}
             >
-              Login
-              <div className="absolute inset-0 h-full w-full scale-0 rounded-2xl transition-all duration-300 group-hover:scale-100 group-hover:bg-white/30"></div>
-            </button>
+              <DrumIcon />
+              Iniciar sesión
+
+            </Button>
+
           )}
         </div>
       </div>
