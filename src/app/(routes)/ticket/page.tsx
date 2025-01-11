@@ -12,8 +12,9 @@ import TicketPlatinum from "@/app/components/TicketPlatinum";
 import { Tooltip } from "@/app/components/Tooltip";
 import { FLAVORS } from "@/app/flavors/data";
 import { cn } from "@/app/lib/utils";
+import { toJpeg } from "html-to-image";
 import { signOut, useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const MATERIALS_LIST = {
   STANDARD: 'standard',
@@ -26,6 +27,7 @@ export default function Page({
   material: defaultMaterial = MATERIALS_LIST.STANDARD,
   // tracks = [],
 }) {
+  const [buttonText, setButtonText] = useState(STEPS_LOADING.ready)
   const { data: session, status } = useSession()
   const [selectedMaterial, setSelectedMaterial] = useState(defaultMaterial)
 
@@ -68,6 +70,33 @@ export default function Page({
   const flavor = FLAVORS[flavorKey as keyof typeof FLAVORS]
 
 
+
+  const useTicketSave = ({ buttonStatus, isMaterialChange }) => {
+    const [generatedImage, setGeneratedImage] = useState(null)
+
+    const saveButtonText = useMemo(() => {
+      if (buttonStatus === STEPS_LOADING.generate) return 'Creando...'
+      return 'Guardar'
+    }, [buttonStatus])
+
+    useEffect(() => {
+      toJpeg(document.getElementById('ticket'), {
+        quality: 0.95,
+      }).then(handleSaveImage)
+    }, [isMaterialChange])
+
+    const handleSaveImage = (dataURL) => {
+      setGeneratedImage(dataURL)
+    }
+
+    return { generatedImage, handleSaveImage, saveButtonText }
+  }
+
+  const { generatedImage, handleSaveImage, saveButtonText } = useTicketSave({
+    buttonStatus: buttonText,
+    isMaterialChange: selectedMaterial
+  })
+
   return (
     <BackgroundTicket>
       <div aria-disabled className="w-[800px] -mb-[366px] relative -left-[200vw]">
@@ -75,6 +104,7 @@ export default function Page({
           {selectedMaterial === MATERIALS_LIST.STANDARD && (
 
             <Ticket
+
               isSizeFixed
               transition={false}
               flavor={flavor}
@@ -88,19 +118,20 @@ export default function Page({
           {selectedMaterial === MATERIALS_LIST.PLATINUM && (
             <TicketPlatinum
               isSizeFixed
+
               transition={false}
               flavor={flavor}
               user={{
                 avatar: session?.user?.image || "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true",
                 username: session?.user?.image || "Clancy",
               }}
-              handleRemoveTrack={() => { }}
+
             />
           )}
 
         </div>
       </div>
-      <main className="max-w-screen-xl mx-auto mt-40 pb-20 gap-8 px-4 flex flex-col lg:grid grid-cols-[auto_1fr] items-center">
+      <main className="max-w-screen-xl mx-auto mt-28 pb-20 gap-8 px-4 flex flex-col lg:grid grid-cols-[auto_1fr] items-center">
         <div>
           <div className="w-auto">
             <div className="max-w-[400px] md:max-w-[700px] md:w-[700px] mx-auto">
@@ -123,7 +154,7 @@ export default function Page({
                       avatar: session?.user?.image || "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true",
                       username: session?.user?.name || "Clancy",
                     }}
-                    handleRemoveTrack={() => { }}
+
                   />
                 )}
               </Container3D>
@@ -202,11 +233,15 @@ export default function Page({
             Compartir
           </Button>
           <Button
+            as="a"
+            href={generatedImage}
+            download="ticket.png"
             variant="secondary"
             type="button"
+            disabled={buttonText !== STEPS_LOADING.ready}
           >
             <DownloadIcon />
-            Descargar
+            {saveButtonText}
           </Button>
           <Button
             variant="secondary"
@@ -239,3 +274,9 @@ export const TRACKS_LIST = [
     TrackImage: Blurryface,
   }
 ]
+
+const STEPS_LOADING = {
+  ready: 'Compartir',
+  generate: 'Generando...',
+  sharing: 'Compartiendo...'
+}

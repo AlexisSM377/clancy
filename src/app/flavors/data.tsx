@@ -4,6 +4,7 @@ import { TwentyOnePilots } from "../components/icons/twentyonepilots";
 
 export const FLAVORS = {
     twentyonepilots: {
+        title: 'Twenty One Pilots',
         icon: TwentyOnePilots,
         colorPalette: {
             bg: 'bg-[#89c23e]/80',
@@ -16,6 +17,7 @@ export const FLAVORS = {
     },
 
     blurryface: {
+        title: 'Blurryface',
         icon: Blurryface,
         colorPalette: {
             bg: "bg-[#000000]/80",
@@ -27,6 +29,7 @@ export const FLAVORS = {
         },
     },
     clancy: {
+        title: "Clancy",
         icon: Clancy,
         colorPalette: {
             bg: "bg-[#D62420]/80",

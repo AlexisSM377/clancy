@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { cn } from "../lib/utils"
+import { StreamingIcons } from "./icons/streaming"
 import { TopLogo } from "./logos/top"
 import { formatEventTimeWithTimeZoneName } from "./utilities/timezone"
 
@@ -7,6 +8,7 @@ interface Props {
     transition?: boolean
     className?: string
     flavor: {
+        title: string
         icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
         colorPalette: {
             bg: string
@@ -32,15 +34,15 @@ interface Props {
 export default function TicketPlatinum({
     transition = true,
     className,
-    flavor: { icon: Icon, colorPalette },
+    flavor: { icon: Icon, colorPalette, title },
     user,
     isSizeFixed = false,
     id,
     handleRemoveTrack,
     selectedTrack
 }: Props) {
-    const timeZone = 'America/Mexico_City'
-    const { username, avatar } = user
+    const timeZone = 'Mexico City'
+    const { username, avatar } = user ?? {}
 
     return (
         <div
@@ -63,7 +65,7 @@ export default function TicketPlatinum({
                     className={cn(
                         'h-full font-bold text-center text-[#FFD800] uppercase',
                         isSizeFixed
-                            ? 'ticket-dash-border px-4 text-3xl py-0 leading-none [writing-mode:vertical-lr]'
+                            ? 'ticket-dash-border px-4 text-2xl py-0 leading-none [writing-mode:vertical-lr]'
                             : 'ticket-dash-border-top row-[3/4] px-4 py-4 md:py-0 text-2xl md:px-4 md:text-xl md:[writing-mode:vertical-lr] md:ticket-dash-border'
                     )}
                 >
@@ -81,7 +83,7 @@ export default function TicketPlatinum({
                     >
                         <Icon className='absolute z-40 w-auto h-full' />
                         <Icon
-                            className="absolute w-auto h-full scale-105 blur-xl -z-10 opacity-40"
+                            className="absolute w-auto h-full scale-105 blur-sm -z-10 opacity-95"
                             key={`${username}-shadow`}
                         />
                     </div>
@@ -146,17 +148,70 @@ export default function TicketPlatinum({
                                     isSizeFixed ? 'text-right mr-0' : 'text-center mr-auto md:mr-0 md:text-right'
                                 )}
                             >
-                                Feb. 20 2025
+                                Feb. 20 2025 CDMX
                                 <span
                                     className={cn(
                                         'block text-sm font-normal text-white/60',
                                         !isSizeFixed && 'animate-blurred-fade-in'
                                     )}
                                 >
-                                    {timeZone == null ? '' : formatEventTimeWithTimeZoneName(1740063600000, timeZone)}
+                                    9 p. m. {timeZone}
                                 </span>
                             </time>
                         </div>
+                    </div>
+                    <div
+                        className={cn(
+                            'grid self-end gap-4',
+                            isSizeFixed
+                                ? 'grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-0'
+                                : ' grid-cols-1 md:grid-cols-[1fr_auto] md:grid-rows-[auto_auto] md:gap-0'
+                        )}
+                    >
+                        <div
+                            className={cn(
+                                'flex flex-col justify-end',
+                                isSizeFixed
+                                    ? 'mx-0 px-0 pb-5 pl-5 items-start w-auto row-[2/3]'
+                                    : 'px-2 md:px-0 items-center w-full md:w-auto md:items-start pb-0 md:pl-5 md:pb-5 mx-auto md:mx-0 md:row-[2/3]'
+                            )}
+                        >
+                            <span className='pb-1 pl-2 text-sm text-white/80'>Escuchar en:</span>
+                            <div
+                                className={cn(
+                                    'flex items-center flex-wrap justify-center grid-cols-3 gap-4 px-4 py-2 bg-white/10 w-auto',
+                                    isSizeFixed
+                                        ? 'rounded-full justify-start flex-nowrap'
+                                        : 'rounded md:rounded-full md:justify-start md:flex-nowrap'
+                                )}
+                            >
+                                <LIST_OF_TICKETS__STREAMING.spotify className='w-auto h-auto max-h-5 md:max-h-6' />
+                                <LIST_OF_TICKETS__STREAMING.youtube className='w-auto h-auto max-h-5 md:max-h-6' />
+                                <LIST_OF_TICKETS__STREAMING.applemusic className='w-auto h-auto max-h-5 md:max-h-6' />
+
+
+                            </div>
+
+                        </div>
+                        <h1
+                            className=' sm:justify-self-end sm:justify-end gap-2 p-5 mt-4 font-bold  hover:text-[#FFD800] transition-colors sm:text-2xl text-xl uppercase animate-vertical-bounce text-center'>
+                            {title}
+                        </h1>
+                        <a
+                            href='https://www.twentyonepilots.com'
+                            target='_blank'
+                            rel='nofollow'
+                            className={cn(
+                                'flex items-center justify-self-end justify-end gap-2 p-5 font-bold text-white w-max hover:text-[#FFD800] transition-colors',
+                                isSizeFixed
+                                    ? 'text-base mx-0 pt-5 col-[1/3] row-[1/2] h-max py-0'
+                                    : 'pt-0 text-md md:text-base mx-auto md:mx-0 md:pt-5 md:py-0 md:h-max md:row-[1/2] md:col-[1/3]'
+                            )}
+                        >
+
+                            #theclancyworldtour
+                        </a>
+
 
                     </div>
 
@@ -188,4 +243,10 @@ const NotAvatarUser = ({ isSizeFixed }: { isSizeFixed: boolean }) => {
             </div>
         </div>
     )
+}
+
+const LIST_OF_TICKETS__STREAMING = {
+    spotify: StreamingIcons.spotify,
+    youtube: StreamingIcons.youtube,
+    applemusic: StreamingIcons.applemusic,
 }

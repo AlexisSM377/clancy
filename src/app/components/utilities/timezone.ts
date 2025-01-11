@@ -68,7 +68,7 @@ export function formatEventTimeWithTimeZoneName(
   timestamp: number,
   timeZone: string
 ): string {
-  const formattedTime = new Intl.DateTimeFormat("es-MX", {
+  const formattedTime = new Intl.DateTimeFormat("es", {
     hour: "numeric",
     minute: "numeric",
     hour12: true,
@@ -77,7 +77,7 @@ export function formatEventTimeWithTimeZoneName(
 
   const timeZoneName =
     timeZoneAbbreviations[timeZone] ||
-    new Intl.DateTimeFormat("es-MX", {
+    new Intl.DateTimeFormat("es", {
       timeZone,
       timeZoneName: "short",
     })

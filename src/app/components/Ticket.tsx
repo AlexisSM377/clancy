@@ -9,6 +9,7 @@ interface Props {
     transition?: boolean
     className?: string
     flavor: {
+        title: string
         icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
         colorPalette: {
             bg: string
@@ -34,14 +35,14 @@ interface Props {
 export default function Ticket({
     transition = true,
     className,
-    flavor: { icon: Icon, colorPalette },
+    flavor: { title, icon: Icon, colorPalette },
     user,
     isSizeFixed = false,
     id,
     handleRemoveTrack,
     selectedTrack
 }: Props) {
-    const timeZone = 'America/Mexico_City'
+    const timeZone = 'Mexico City'
     const { username, avatar } = user ?? {}
 
 
@@ -80,7 +81,7 @@ export default function Ticket({
                     className={cn(
                         'h-full text-center text-[#FFD800] font-bold uppercase',
                         isSizeFixed
-                            ? 'ticket-dash-border px-4 text-3xl py-0 leading-none [writing-mode:vertical-lr]'
+                            ? 'ticket-dash-border px-4 text-2xl py-0 leading-none [writing-mode:vertical-lr]'
                             : 'ticket-dash-border-top row-[3/4] px-4 py-4 md:py-0 text-2xl md:px-4 md:text-xl md:[writing-mode:vertical-lr] md:ticket-dash-border'
                     )}
                 >
@@ -98,8 +99,10 @@ export default function Ticket({
                     >
                         <Icon className='absolute w-auto h-full' />
                         <Icon className='absolute w-auto h-full scale-150 blur-xl -z-10 opacity-90' key={`${username}-shadow`} />
+
                     </div>
                 }
+
                 <div
                     className={cn(
                         'z-10 grid w-full grid-rows-2',
@@ -155,16 +158,19 @@ export default function Ticket({
                                     isSizeFixed ? 'text-right mr-0' : 'text-center mr-auto md:mr-0 md:text-right'
                                 )}
                             >
-                                Feb. 20 2025
+                                Feb. 20 2025 CDMX
                                 <span
                                     className={cn(
                                         'block text-sm font-normal text-white/60',
                                         !isSizeFixed && 'animate-blurred-fade-in'
                                     )}
                                 >
-                                    {timeZone == null ? '' : formatEventTimeWithTimeZoneName(1740063600000, timeZone)}
+                                    9 p. m. {timeZone}
                                 </span>
                             </time>
+                            <h4 className='text-sm font-bold text-right mt-8 text-[#d5d0c3] '>
+                                Tyler Joseph & Josh Dun
+                            </h4>
                         </div>
                     </div>
                     <div
@@ -292,6 +298,10 @@ export default function Ticket({
                             </div>
 
                         </div>
+                        <h1
+                            className=' sm:justify-self-end sm:justify-end gap-2 p-5 font-bold  hover:text-[#FFD800] transition-colors sm:text-2xl text-xl uppercase animate-vertical-bounce text-center'>
+                            {title}
+                        </h1>
                         <a
                             href='https://www.twentyonepilots.com'
                             target='_blank'
@@ -304,8 +314,9 @@ export default function Ticket({
                             )}
                         >
 
-                            #twentyonepilots
+                            #theclancyworldtour
                         </a>
+
 
                     </div>
                 </div>
