@@ -9,12 +9,13 @@ import { useRouter } from "next/navigation";
 import { Button } from "../components/Button";
 import { DrumIcon } from "../components/icons/music";
 import { TicketIcon } from "../components/icons/ticket";
+import TicketPlatinum from "../components/TicketPlatinum";
 
-interface TicketHomeProps {
-  initialFlavor?: string;
-}
+// interface TicketHomeProps {
+//   initialFlavor?: string;
+// }
 
-export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
+export const TicketHome = (initialFlavor) => {
   const { data: session, status } = useSession();
   const route = useRouter()
   const [flavor, setFlavor] = useState(
@@ -42,7 +43,15 @@ export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
         <div className="flex items-center justify-center max-w-[700px] mx-auto mt-16 flex-0">
           <Container3D>
             <Ticket
-              transition={true}
+              transition={initialFlavor}
+              flavor={flavor}
+              user={{
+                avatar: session?.user?.image || "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true",
+                username: session?.user?.name || 'Clancy',
+              }}
+            />
+            <TicketPlatinum
+              transition={initialFlavor}
               flavor={flavor}
               user={{
                 avatar: session?.user?.image || "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true",

@@ -2,14 +2,13 @@
 import { cn } from "../lib/utils"
 import { StreamingIcons } from "./icons/streaming"
 import { TopLogo } from "./logos/top"
-import { formatEventTimeWithTimeZoneName } from "./utilities/timezone"
 
 interface Props {
     transition?: boolean
     className?: string
     flavor: {
         title: string
-        icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+        img: string
         colorPalette: {
             bg: string
             borders: {
@@ -25,21 +24,14 @@ interface Props {
     }
     isSizeFixed?: boolean
     id?: string
-    handleRemoveTrack?: (index: number) => void
-    selectedTrack?: {
-        list: (string | number)[]
-        limit: number
-    }
 }
 export default function TicketPlatinum({
     transition = true,
     className,
-    flavor: { icon: Icon, colorPalette, title },
+    flavor: { img, title },
     user,
     isSizeFixed = false,
-    id,
-    handleRemoveTrack,
-    selectedTrack
+    id
 }: Props) {
     const timeZone = 'Mexico City'
     const { username, avatar } = user ?? {}
@@ -51,6 +43,7 @@ export default function TicketPlatinum({
                 'block h-full overflow-hidden rounded-[35px] border-2 border-transparent p-5',
                 isSizeFixed ? 'aspect-[2/1] w-full' : 'aspect-none w-full md:aspect-[2/1]',
                 transition ? 'transition duration-500 ease-in-out' : '',
+                className
             )}
         >
             <div
@@ -81,11 +74,8 @@ export default function TicketPlatinum({
                                 : 'md:w-auto row-[2/3] mb-8 md:mb-0 left-0 mx-auto md:mx-0 h-32 md:h-[40%] relative flex justify-center w-full md:block bottom-0 md:left-[25%] md:bottom-[20%] md:absolute'
                         )}
                     >
-                        <Icon className='absolute z-40 w-auto h-full' />
-                        <Icon
-                            className="absolute w-auto h-full scale-105 blur-sm -z-10 opacity-95"
-                            key={`${username}-shadow`}
-                        />
+                        <img className='absolute w-auto h-full' src={img} />
+                        <img className='absolute w-auto h-full scale-150 blur-xl -z-10 opacity-90' key={`${username}-shadow`} src={img} />
                     </div>
                 }
                 <div
@@ -165,7 +155,7 @@ export default function TicketPlatinum({
                             'grid self-end gap-4',
                             isSizeFixed
                                 ? 'grid-cols-[1fr_auto] grid-rows-[auto_auto] gap-0'
-                                : ' grid-cols-1 md:grid-cols-[1fr_auto] md:grid-rows-[auto_auto] md:gap-0'
+                                : 'grid-cols-1 md:grid-cols-[1fr_auto] md:grid-rows-[auto_auto] md:gap-0'
                         )}
                     >
                         <div
@@ -188,10 +178,7 @@ export default function TicketPlatinum({
                                 <LIST_OF_TICKETS__STREAMING.spotify className='w-auto h-auto max-h-5 md:max-h-6' />
                                 <LIST_OF_TICKETS__STREAMING.youtube className='w-auto h-auto max-h-5 md:max-h-6' />
                                 <LIST_OF_TICKETS__STREAMING.applemusic className='w-auto h-auto max-h-5 md:max-h-6' />
-
-
                             </div>
-
                         </div>
                         <h1
                             className=' sm:justify-self-end sm:justify-end gap-2 p-5 mt-4 font-bold  hover:text-[#FFD800] transition-colors sm:text-2xl text-xl uppercase animate-vertical-bounce text-center'>
@@ -211,14 +198,9 @@ export default function TicketPlatinum({
 
                             #theclancyworldtour
                         </a>
-
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     )
 }

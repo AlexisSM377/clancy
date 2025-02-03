@@ -2,10 +2,7 @@
 import { BackgroundTicket } from "@/app/components/BackgroundTicket";
 import { Button } from "@/app/components/Button";
 import { Container3D } from "@/app/components/Container3D";
-import { Blurryface } from "@/app/components/icons/blurryface";
-import { Clancy } from "@/app/components/icons/clancy";
 import { DownloadIcon } from "@/app/components/icons/download";
-import { InstagramIcon } from "@/app/components/icons/instagram";
 import { LogoutIcon } from "@/app/components/icons/logout";
 import Ticket from "@/app/components/Ticket";
 import TicketPlatinum from "@/app/components/TicketPlatinum";
@@ -18,47 +15,25 @@ import { useEffect, useMemo, useState } from "react";
 
 const MATERIALS_LIST = {
   STANDARD: 'standard',
-  PLATINUM: 'platinum',
+  PREMIUM: 'premium',
+}
+
+interface Material {
+  buttonStatus: string,
+  isMaterialChange: string,
+  flavorKey: string
 }
 
 
 export default function Page({
   selectedFlavor = "twentyonepilots",
   material: defaultMaterial = MATERIALS_LIST.STANDARD,
-  // tracks = [],
 }) {
   const [buttonText, setButtonText] = useState(STEPS_LOADING.ready)
   const { data: session, status } = useSession()
   const [selectedMaterial, setSelectedMaterial] = useState(defaultMaterial)
 
-  // const [selectedTrack, setSelectedTrack] = useState(() => {
-  //   const currentTrack = tracks.map((track) => (track === 'null' ? null : track))
-  //   const currentList = tracks.map((track) => {
-  //     if (track === 'null') return null
-  //     const trackComponent = TRACKS_LIST.find(({name}) => name === track)
-  //     return trackComponent?.TrackImage
-  //   })
-  //   return {
-  //     namesList: currentTrack,
-  //     list: currentList
-  //   }
-  // })
 
-  // const handleSelectTrack = async (track, nameTrack) => {
-  //   const newTracks = selectedTrack.list
-  //   const newTracksNames = selectedTrack.namesList
-  //   const limitTracks = 3
-  //   const index = newTracks.findIndex((track, i) => track == null && i + 1 <= limitTracks)
-
-  //   index === -1 ? (newTracks[limitTracks -1] = track) : (newTracks[index] = track)
-  //   index === -1
-  //       ? (newTracksNames[limitTracks -1] = nameTrack)
-  //       : (newTracksNames[index] = nameTrack)
-
-  //   setSelectedTrack({ list: newTracks, namesList: newTracksNames})
-
-  //   const {dataURL} = await h
-  // }
 
   const [flavorKey, setFlavoyKey] = useState(() => {
     if (Object.keys(FLAVORS).includes(selectedFlavor)) {
@@ -69,9 +44,7 @@ export default function Page({
 
   const flavor = FLAVORS[flavorKey as keyof typeof FLAVORS]
 
-
-
-  const useTicketSave = ({ buttonStatus, isMaterialChange }) => {
+  const useTicketSave = ({ buttonStatus, isMaterialChange, flavorKey }: Material) => {
     const [generatedImage, setGeneratedImage] = useState(null)
 
     const saveButtonText = useMemo(() => {
@@ -83,7 +56,7 @@ export default function Page({
       toJpeg(document.getElementById('ticket'), {
         quality: 0.95,
       }).then(handleSaveImage)
-    }, [isMaterialChange])
+    }, [isMaterialChange, flavorKey])
 
     const handleSaveImage = (dataURL) => {
       setGeneratedImage(dataURL)
@@ -94,7 +67,8 @@ export default function Page({
 
   const { generatedImage, handleSaveImage, saveButtonText } = useTicketSave({
     buttonStatus: buttonText,
-    isMaterialChange: selectedMaterial
+    isMaterialChange: selectedMaterial,
+    flavorKey: flavorKey
   })
 
   return (
@@ -115,7 +89,7 @@ export default function Page({
 
             />
           )}
-          {selectedMaterial === MATERIALS_LIST.PLATINUM && (
+          {selectedMaterial === MATERIALS_LIST.PREMIUM && (
             <TicketPlatinum
               isSizeFixed
 
@@ -123,7 +97,7 @@ export default function Page({
               flavor={flavor}
               user={{
                 avatar: session?.user?.image || "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true",
-                username: session?.user?.image || "Clancy",
+                username: session?.user?.name || "Clancy",
               }}
 
             />
@@ -145,7 +119,7 @@ export default function Page({
                     }}
                   />
                 )}
-                {selectedMaterial === MATERIALS_LIST.PLATINUM && (
+                {selectedMaterial === MATERIALS_LIST.PREMIUM && (
 
                   <TicketPlatinum
 
@@ -162,11 +136,37 @@ export default function Page({
             <div className={cn(
               'w-2/3 mx-auto h-6 rounded-[50%] mt-6 transition-colors duration-300 blur-lg',
               flavor.colorPalette?.bg,
-              selectedMaterial === MATERIALS_LIST.PLATINUM && 'bg-[#E23D2E]'
+              selectedMaterial === MATERIALS_LIST.STANDARD && 'bg-[#FFD800]',
+              selectedMaterial === MATERIALS_LIST.PREMIUM && 'bg-[#E23D2E]'
             )}
             ></div>
           </div>
-          <div className="flex flex-col items-center w-full px-8 mt-16 mb-16 gap-x-10 gap-y-4 lg:mb-0 lg:mt-4 md:flex-row"></div>
+          <div className="flex flex-col items-center w-full px-8 mt-16 mb-16 gap-x-10 gap-y-4 lg:mb-0 lg:mt-4 md:flex-row">
+            <Button
+              as="a"
+              href={generatedImage}
+              download="ticket.png"
+              variant="secondary"
+              type="button"
+              disabled={buttonText !== STEPS_LOADING.ready}
+            >
+              <DownloadIcon />
+              {saveButtonText}
+            </Button>
+            <Button
+              variant="secondary"
+              type="button"
+              className="ml-0 lg:ml-auto"
+              onClick={() => {
+                signOut(
+                  { callbackUrl: '/' }
+                )
+              }}
+            >
+              <LogoutIcon />
+              Cerrar sesión
+            </Button>
+          </div>
         </div>
         <div className="w-full md:order-none">
           <div>
@@ -184,10 +184,10 @@ export default function Page({
                 Top canciones
               </Button>
               <Button
-                onClick={async () => await setSelectedMaterial(MATERIALS_LIST.PLATINUM)}
+                onClick={async () => await setSelectedMaterial(MATERIALS_LIST.PREMIUM)}
                 className={cn(
                   'py-3 transition-all',
-                  MATERIALS_LIST.PLATINUM !== selectedMaterial &&
+                  MATERIALS_LIST.PREMIUM !== selectedMaterial &&
                   'bg-transparent border-transparent'
                 )}
                 variant="secondary">
@@ -198,7 +198,7 @@ export default function Page({
           <div className="w-full z-[99999] opacity-[.99] mt-10 md:mt-2">
             <h2 className="text-2xl font-bold lg:pl-8">Track</h2>
             <div className="flex flex-row w-full p-8 max-h-[24rem] overflow-x-auto text-center flex-nowrap md:flex-wrap gap-x-8 gap-y-12 lg:pb-20 hidden-scroll lg:flavors-gradient-list">
-              {Object.entries(FLAVORS).map(([key, { icon: Icon }]) => {
+              {Object.entries(FLAVORS).map(([key, img]) => {
                 return (
                   <Tooltip key={key} text={key} offsetNumber={16}>
 
@@ -212,7 +212,11 @@ export default function Page({
                     >
                       <div className="flex items-center justify-center w-14 h-14 transition group-hover:scale-110">
 
-                        <Icon className="h-auto rounded-sm" />
+                        <img
+                          src={img.img}
+                          alt={key}
+                          className="h-auto"
+                        />
                       </div>
                     </button>
                   </Tooltip>
@@ -224,39 +228,7 @@ export default function Page({
           </div>
 
         </div>
-        <div className="flex flex-col items-center w-full px-8 mt-16 mb-16 gap-x-10 gap-y-4 lg:mb:0 lg:mt-4 md:flex-row">
-          <Button
-            variant="secondary"
-            type="button"
-          >
-            <InstagramIcon />
-            Compartir
-          </Button>
-          <Button
-            as="a"
-            href={generatedImage}
-            download="ticket.png"
-            variant="secondary"
-            type="button"
-            disabled={buttonText !== STEPS_LOADING.ready}
-          >
-            <DownloadIcon />
-            {saveButtonText}
-          </Button>
-          <Button
-            variant="secondary"
-            type="button"
-            className="ml-0 lg:ml-auto"
-            onClick={() => {
-              signOut(
-                { callbackUrl: '/' }
-              )
-            }}
-          >
-            <LogoutIcon />
-            Cerrar sesión
-          </Button>
-        </div>
+
       </main>
 
     </BackgroundTicket>
@@ -264,16 +236,6 @@ export default function Page({
 }
 
 
-export const TRACKS_LIST = [
-  {
-    name: "The Hype",
-    TrackImage: Clancy,
-  },
-  {
-    name: "The Hype",
-    TrackImage: Blurryface,
-  }
-]
 
 const STEPS_LOADING = {
   ready: 'Compartir',

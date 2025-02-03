@@ -16,7 +16,7 @@ import { useEffect } from 'react';
 import fjGallery from 'flickr-justified-gallery';
 
 
-function Gallery() {
+const Gallery = () => {
 
     useEffect(() => {
         fjGallery(document.querySelectorAll('.gallery'), {
@@ -26,7 +26,7 @@ function Gallery() {
             gutter: 8,
             rowHeightTolerance: 0.1,
             calculateItemsHeight: false,
-
+            captions: true,
         });
     }, []);
 
@@ -52,12 +52,17 @@ function Gallery() {
             <LightGallery
                 speed={500}
                 plugins={[lgThumbnail, lgZoom]}
+
                 elementClassNames={'gallery'}
                 mobileSettings={{
-                    controls: false,
-                    showCloseIcon: false,
-                    download: false,
-                    rotate: false,
+                    controls: true,
+                    download: true,
+                    rotate: true,
+                    zoom: true,
+                    share: true,
+                    autoplay: false,
+                    fullScreen: true,
+
                 }}
             >
                 {

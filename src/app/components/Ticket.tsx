@@ -2,7 +2,6 @@
 import 'atropos/css'
 import { cn } from '../lib/utils'
 import { TopLogo } from './logos/top'
-import { formatEventTimeWithTimeZoneName } from './utilities/timezone'
 import { StreamingIcons } from './icons/streaming'
 
 interface Props {
@@ -10,7 +9,7 @@ interface Props {
     className?: string
     flavor: {
         title: string
-        icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+        img: string
         colorPalette: {
             bg: string
             borders: {
@@ -26,21 +25,14 @@ interface Props {
     }
     isSizeFixed?: boolean
     id?: string
-    handleRemoveTrack?: (index: number) => void
-    selectedTrack?: {
-        list: (string | number)[]
-        limit: number
-    }
 }
 export default function Ticket({
     transition = true,
     className,
-    flavor: { title, icon: Icon, colorPalette },
+    flavor: { title, img, colorPalette },
     user,
     isSizeFixed = false,
-    id,
-    handleRemoveTrack,
-    selectedTrack
+    id
 }: Props) {
     const timeZone = 'Mexico City'
     const { username, avatar } = user ?? {}
@@ -91,15 +83,14 @@ export default function Ticket({
                     <div
                         key={username}
                         className={cn(
-                            '-rotate-12 sm:pl-20 sm:pt-2',
+                            '-rotate-12 sm:pl-28',
                             isSizeFixed
                                 ? 'absolute bottom-[20%] left-[25%] mb-0 h-[40%] w-auto block'
-                                : 'md:w-auto row-[2/3] mb-8 md:mb-0 left-0 mx-auto md:mx-0 h-32 md:h-[40%] relative flex justify-center w-full md:block bottom-0 md:left-[25%] md:bottom-[20%]  md:absolute'
+                                : 'md:w-80 row-[2/3] mb-4 md:mb-0 mx-auto md:mx-0 h-32 md:h-[40%] relative flex w-full md:block bottom-0 md:left-[20%] md:bottom-[20%] md:absolute'
                         )}
                     >
-                        <Icon className='absolute w-auto h-full' />
-                        <Icon className='absolute w-auto h-full scale-150 blur-xl -z-10 opacity-90' key={`${username}-shadow`} />
-
+                        <img className='absolute w-auto h-full' src={img} />
+                        <img className='absolute w-auto h-full scale-150 blur-xl -z-10 opacity-90' key={`${username}-shadow`} src={img} />
                     </div>
                 }
 
@@ -146,7 +137,8 @@ export default function Ticket({
                                 'items-center gap-4 p-5 flex-row',
                                 isSizeFixed && avatar
                                     ? 'block'
-                                    : `${avatar ? 'hidden' : 'flex'} md:block flex-col-reverse md:flex-row`
+                                    : `${avatar ? 'hidden' : 'flex'} md:block flex-col-reverse md:flex-row`,
+                                avatar == null ?? 'hidden'
                             )}
                         >
 
@@ -172,98 +164,6 @@ export default function Ticket({
                                 Tyler Joseph & Josh Dun
                             </h4>
                         </div>
-                    </div>
-                    <div
-                        className={cn(
-                            'flex flex-row-reverse items-center w-auto h-auto gap-2 mx-auto md:ml-0',
-                            isSizeFixed ? 'justify-self-end mr-4' : 'justify-center md:justify-self-end md:mr-4'
-                        )}
-                    >
-                        {
-                            selectedTrack?.list &&
-                            selectedTrack?.list.map((track, index) => (
-                                <div
-                                    key={index}
-                                    className={cn(
-                                        'relative h-auto group justify-center flex text-white items-center opacity-80'
-                                    )}
-                                >
-                                    {index < selectedTrack.limit &&
-                                        track != null &&
-                                        handleRemoveTrack != null && (
-                                            <button
-                                                onClick={() => handleRemoveTrack(index)}
-                                                title='Borrar canción'
-                                                aria-label='Borrar canción'
-                                                className='absolute top-0 right-0 items-center justify-center hidden w-4 h-4 text-sm transition-transform border rounded-full group-hover:flex hover:scale-125 bg-red-400/60 justify-items-center border-white/60'
-                                            >
-                                                <svg
-                                                    xmlns='http://www.w3.org/2000/svg'
-                                                    width='24'
-                                                    height='24'
-                                                    viewBox='0 0 24 24'
-                                                    fill='none'
-                                                    stroke='currentColor'
-                                                    strokeWidth='2'
-                                                    strokeLinecap='round'
-                                                    strokeLinejoin='round'
-                                                    className='w-3 h-3'
-                                                >
-                                                    <line x1='18' y1='6' x2='6' y2='18'></line>
-                                                    <line x1='6' y1='6' x2='18' y2='18'></line>
-                                                </svg>
-
-                                            </button>
-                                        )
-                                    }
-                                    {selectedTrack.limit > index ? (
-                                        <div
-                                            className={cn(
-                                                'p-2',
-                                                track == null &&
-                                                !isSizeFixed &&
-                                                handleRemoveTrack != null &&
-                                                'bg-white/10 border w-12 h-12 border-dashed rounded-lg'
-                                            )}
-                                        >
-                                            {track}
-                                        </div>
-                                    ) : (
-                                        <>
-                                            {handleRemoveTrack != null && (
-                                                <div
-                                                    className={cn(
-                                                        'flex items-center justify-center w-12 h-12 p-2 border border-dashed rounded-lg opacity-20',
-                                                        isSizeFixed && 'hidden'
-                                                    )}
-                                                >
-                                                    <svg
-                                                        xmlns='http://www.w3.org/2000/svg'
-                                                        width='24'
-                                                        height='24'
-                                                        viewBox='0 0 24 24'
-                                                        fill='none'
-                                                        stroke='currentColor'
-                                                        strokeWidth='2'
-                                                        strokeLinecap='round'
-                                                        strokeLinejoin='round'
-                                                        className='w-6 h-6'
-                                                    >
-                                                        <path stroke='none' d='M0 0h24v24H0z' fill='none' />
-                                                        <path d='M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z' />
-                                                        <path d='M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0' />
-                                                        <path d='M8 11v-4a4 4 0 1 1 8 0v4' />
-                                                    </svg>
-
-
-                                                </div>
-                                            )}
-                                        </>
-                                    )}
-
-                                </div>
-                            ))
-                        }
                     </div>
                     <div
                         className={cn(

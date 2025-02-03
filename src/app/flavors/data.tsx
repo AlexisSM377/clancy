@@ -1,11 +1,12 @@
 import { Blurryface } from "../components/icons/blurryface";
 import { Clancy } from "../components/icons/clancy";
 import { TwentyOnePilots } from "../components/icons/twentyonepilots";
+import { Vessel } from "../components/icons/vessel";
 
 export const FLAVORS = {
     twentyonepilots: {
         title: 'Twenty One Pilots',
-        icon: TwentyOnePilots,
+        img: 'https://i.scdn.co/image/ab67616d0000b2739cf15c7323fb85b7112197d5',
         colorPalette: {
             bg: 'bg-[#89c23e]/80',
             borders: {
@@ -18,7 +19,7 @@ export const FLAVORS = {
 
     blurryface: {
         title: 'Blurryface',
-        icon: Blurryface,
+        img: 'https://i.scdn.co/image/ab67616d0000b2739cf15c7323fb85b7112197d5',
         colorPalette: {
             bg: "bg-[#000000]/80",
             borders: {
@@ -30,7 +31,7 @@ export const FLAVORS = {
     },
     clancy: {
         title: "Clancy",
-        icon: Clancy,
+        img: 'https://i.scdn.co/image/ab67616d0000b2739cf15c7323fb85b7112197d5',
         colorPalette: {
             bg: "bg-[#D62420]/80",
             borders: {
@@ -38,6 +39,18 @@ export const FLAVORS = {
                 inside: "border-red-400/10",
             },
             shadowColor: "shadow-red-400/25",
+        },
+    },
+    vessel: {
+        title: "Vessel",
+        img: 'https://i.scdn.co/image/ab67616d0000b2739cf15c7323fb85b7112197d5',
+        colorPalette: {
+            bg: "bg-[#989898]/90",
+            borders: {
+                outside: "border-white-300/20",
+                inside: "border-white-400/10",
+            },
+            shadowColor: "shadow-white-400/25",
         },
     }
 }

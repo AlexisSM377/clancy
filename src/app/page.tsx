@@ -1,3 +1,4 @@
+'use client'
 import { Background } from "./components/Background";
 import { Hero } from "./sections/hero";
 import { TicketHome } from "./sections/ticket-home";
