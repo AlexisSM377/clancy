@@ -97,6 +97,11 @@ export default function Page({
     }
   }, [buttonText]);
 
+  useEffect(() => {
+    setGeneratedImage(null);
+    setButtonText(STEPS_LOADING.generate);
+  }, [trackIndex, albumIndex, selectedMaterial]);
+
   const trackSelected = tracks[trackIndex];
   const albumSelected = albums[albumIndex];
 
@@ -228,9 +233,9 @@ export default function Page({
                 {albums.map((album, index) => (
                   <Tooltip key={album.id} text={album.name} offsetNumber={16}>
                     <button
-                      className={`relative flex w-12 h-12 transition cursor:pointer group ${index === trackIndex
-                          ? "scale-125 pointer-events-none contrast-125 before:absolute before:rounded-full before:w-2 before:h-2 before:left-0 before:right-0 before:-top-4 before:mx-auto before:bg-yellow-200"
-                          : ""
+                      className={`relative flex w-12 h-12 transition cursor:pointer group ${index === albumIndex
+                        ? "scale-125 pointer-events-none contrast-125 before:absolute before:rounded-full before:w-2 before:h-2 before:left-0 before:right-0 before:-top-4 before:mx-auto before:bg-yellow-200"
+                        : ""
                         }`}
                       onClick={() => setAlbumIndex(index)}
                     >
@@ -265,6 +270,7 @@ export default function Page({
               variant="secondary"
               type="button"
               onClick={() => setButtonText(STEPS_LOADING.generate)}
+              disabled={buttonText === STEPS_LOADING.generate}
             >
               <DownloadIcon />
               {buttonText}

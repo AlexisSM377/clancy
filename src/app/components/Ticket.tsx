@@ -44,7 +44,6 @@ export default function Ticket({
     handleRemoveTrack,
     selectedTrack
 }: Props) {
-    const timeZone = 'America/Mexico_City'
     const { username, avatar } = user ?? {}
 
 
