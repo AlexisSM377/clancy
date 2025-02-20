@@ -81,10 +81,9 @@ export default function Ticket({
                 <div className='absolute w-1/2 rotate-45 h-[300%] left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#41b3ff00] via-[#b0a9ff13] to-[#41b3ff00]'></div>
                 <span
                     className={cn(
-                        'h-full text-center font-bold uppercase',
-                        album && album === 'Trench' ? 'text-[#000]' : 'text-[#FFD800]',
+                        'h-full text-center text-[#FFD800] font-bold uppercase',
                         isSizeFixed
-                            ? 'ticket-dash-border px-4 text-3xl py-0 leading-none [writing-mode:vertical-lr]'
+                            ? 'ticket-dash-border px-4 text-2xl py-0 leading-none [writing-mode:vertical-lr]'
                             : 'ticket-dash-border-top row-[3/4] px-4 py-4 md:py-0 text-2xl md:px-4 md:text-xl md:[writing-mode:vertical-lr] md:ticket-dash-border'
                     )}
                 >
