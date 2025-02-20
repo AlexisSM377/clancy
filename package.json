@@ -14,10 +14,12 @@
     "@midudev/tailwind-animations": "^0.1.0",
     "atropos": "^2.0.2",
     "clsx": "^2.1.1",
+    "html-to-image": "^1.11.13",
     "motion": "^11.15.0",
     "next": "15.0.2",
     "next-auth": "^5.0.0-beta.25",
     "react": "19.0.0-rc-02c0e824-20241028",
+    "react-confetti": "^6.2.2",
     "react-dom": "19.0.0-rc-02c0e824-20241028",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-textshadow": "^2.1.3"
