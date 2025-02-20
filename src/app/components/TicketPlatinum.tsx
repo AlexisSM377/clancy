@@ -6,23 +6,30 @@ import { formatEventTimeWithTimeZoneName } from "./utilities/timezone"
 interface Props {
     transition?: boolean
     className?: string
-    flavor: {
-        icon: string
+    album: {
+        total_tracks: number;
+        id: string;
+        images: { // Cambiar aquí
+            url: string;
+            height: number;
+            width: number;
+        }[];
+        name: string;
         colorPalette: {
-            bg: string
+            bg: string;
             borders: {
-                outside: string
-                inside: string
-            }
-            shadowColor: string
-        }
-    }
+                outside: string;
+                inside: string;
+            };
+            shadowColor: string;
+        };
+    };
     user: {
         username: string
         avatar: string
     }
     isSizeFixed?: boolean
-    id?: string
+    idPrimary?: string
     handleRemoveTrack?: (index: number) => void
     selectedTrack?: {
         list: (string | number)[]
@@ -31,13 +38,9 @@ interface Props {
 }
 export default function TicketPlatinum({
     transition = true,
-    className,
-    flavor: { icon, colorPalette },
+    album: { id, images },
     user,
-    isSizeFixed = false,
-    id,
-    handleRemoveTrack,
-    selectedTrack
+    isSizeFixed = false
 }: Props) {
     const timeZone = 'America/Mexico_City'
     const { username, avatar } = user
@@ -80,12 +83,12 @@ export default function TicketPlatinum({
                         )}
                     >
                         <img
-                            src={icon}
+                            src={images[0].url}
                             alt="Descripción de la imagen"
                             className="absolute z-40 w-auto h-full"
                             />
                             <img
-                            src={icon}
+                            src={images[0].url}
                             alt="Descripción de la imagen"
                             className="absolute w-auto h-full scale-105 blur-xl -z-10 opacity-40"
                             />
