@@ -167,7 +167,7 @@ export default function Page({
         </div>
         <div className="w-full md:order-none">
           <div>
-            <h2 className={`text-3xl font-bold ${trackSelected.album === 'Trench' ? 'text-[#FFD000]' : 'text-[#FFD800]'} lg:pl-8`}>
+            <h2 className={`text-3xl font-bold text-[#FFD800] lg:pl-8`}>
               Twenty one Pilots
             </h2>
             <div className="flex flex-wrap items-center px-8 py-3 gap-x-2 gap-y-2">

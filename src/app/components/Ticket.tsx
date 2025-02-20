@@ -82,6 +82,7 @@ export default function Ticket({
                 <span
                     className={cn(
                         'h-full text-center text-[#FFD800] font-bold uppercase',
+                        album === 'Trench' ? 'text-[#000]' : 'text-[#FFD800]',
                         isSizeFixed
                             ? 'ticket-dash-border px-4 text-2xl py-0 leading-none [writing-mode:vertical-lr]'
                             : 'ticket-dash-border-top row-[3/4] px-4 py-4 md:py-0 text-2xl md:px-4 md:text-xl md:[writing-mode:vertical-lr] md:ticket-dash-border'
@@ -96,7 +97,7 @@ export default function Ticket({
                             '-rotate-12 xl:pl-28 mx-auto md:mx-0 md:pl-0 md:pr-5 md:pt-5 md:pb-0 md:row-[1/2] md:col-[1/3] md:absolute',
                             isSizeFixed
                                 ? 'absolute bottom-[20%] left-[25%] mb-0 h-[40%] w-auto block'
-                                : 'md:w-auto row-[2/3] mb-8 md:mb-0 left-0 mx-auto md:mx-0 h-32 md:h-[40%] relative flex justify-center w-full md:block bottom-0 md:left-[25%] md:bottom-[20%]  md:absolute'
+                                : 'md:w-auto row-[2/3] mb-8 md:mb-0 left-0 mx-auto md:mx-0 h-32 md:h-[40%] relative flex justify-center w-full md:block bottom-0 md:left-[25%] md:bottom-[20%] md:absolute'
                         )}
                     >
                         <img className='absolute w-auto h-full' src={icon} />
