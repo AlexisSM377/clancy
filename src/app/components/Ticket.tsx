@@ -9,7 +9,11 @@ interface Props {
     transition?: boolean
     className?: string
     flavor: {
-        icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+        id: string,
+        track: string,
+        album: string,
+        albumId: string,
+        icon: string
         colorPalette: {
             bg: string
             borders: {
@@ -34,7 +38,7 @@ interface Props {
 export default function Ticket({
     transition = true,
     className,
-    flavor: { icon: Icon, colorPalette },
+    flavor: { track, album, icon, colorPalette },
     user,
     isSizeFixed = false,
     id,
@@ -78,7 +82,8 @@ export default function Ticket({
                 <div className='absolute w-1/2 rotate-45 h-[300%] left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#41b3ff00] via-[#b0a9ff13] to-[#41b3ff00]'></div>
                 <span
                     className={cn(
-                        'h-full text-center text-[#FFD800] font-bold uppercase',
+                        'h-full text-center font-bold uppercase',
+                        album && album === 'Trench' ? 'text-[#000]' : 'text-[#FFD800]',
                         isSizeFixed
                             ? 'ticket-dash-border px-4 text-3xl py-0 leading-none [writing-mode:vertical-lr]'
                             : 'ticket-dash-border-top row-[3/4] px-4 py-4 md:py-0 text-2xl md:px-4 md:text-xl md:[writing-mode:vertical-lr] md:ticket-dash-border'
@@ -90,14 +95,14 @@ export default function Ticket({
                     <div
                         key={username}
                         className={cn(
-                            '-rotate-12 sm:pl-20 sm:pt-2',
+                            '-rotate-12 sm:pl-28 sm:pt-4',
                             isSizeFixed
                                 ? 'absolute bottom-[20%] left-[25%] mb-0 h-[40%] w-auto block'
                                 : 'md:w-auto row-[2/3] mb-8 md:mb-0 left-0 mx-auto md:mx-0 h-32 md:h-[40%] relative flex justify-center w-full md:block bottom-0 md:left-[25%] md:bottom-[20%]  md:absolute'
                         )}
                     >
-                        <Icon className='absolute w-auto h-full' />
-                        <Icon className='absolute w-auto h-full scale-150 blur-xl -z-10 opacity-90' key={`${username}-shadow`} />
+                        <img className='absolute w-auto h-full' src={icon}/>
+                        <img className='absolute w-auto h-full scale-150 blur-xl -z-10 opacity-90' key={`${username}-shadow`} src={icon}/>
                     </div>
                 }
                 <div
@@ -164,7 +169,9 @@ export default function Ticket({
                                 >
                                     {timeZone == null ? '' : formatEventTimeWithTimeZoneName(1740063600000, timeZone)}
                                 </span>
+                              
                             </time>
+                            
                         </div>
                     </div>
                     <div
@@ -287,26 +294,24 @@ export default function Ticket({
                                 <LIST_OF_TICKETS__STREAMING.spotify className='w-auto h-auto max-h-5 md:max-h-6' />
                                 <LIST_OF_TICKETS__STREAMING.youtube className='w-auto h-auto max-h-5 md:max-h-6' />
                                 <LIST_OF_TICKETS__STREAMING.applemusic className='w-auto h-auto max-h-5 md:max-h-6' />
-
-
                             </div>
-
                         </div>
+                      
                         <a
                             href='https://www.twentyonepilots.com'
                             target='_blank'
                             rel='nofollow'
                             className={cn(
-                                'flex items-center justify-self-end justify-end gap-2 p-5 font-bold text-white w-max hover:text-[#FFD800] transition-colors',
+                                'flex flex-col items-center justify-self-end justify-end gap-2 p-5 font-bold text-white w-max hover:text-[#FFD800] transition-colors',
                                 isSizeFixed
                                     ? 'text-base mx-0 pt-5 col-[1/3] row-[1/2] h-max py-0'
-                                    : 'pt-0 text-md md:text-base mx-auto md:mx-0 md:pt-5 md:py-0 md:h-max md:row-[1/2] md:col-[1/3]'
+                                    : 'text-md md:text-base mx-auto md:mx-0 md:pt-5 md:py-0 md:h-max md:row-[1/2] md:col-[1/3]'
                             )}
                         >
 
                             #twentyonepilots
                         </a>
-
+                        <p className='truncate mr-5 mt-7 font-bold uppercase'>{ track }</p>
                     </div>
                 </div>
             </div>

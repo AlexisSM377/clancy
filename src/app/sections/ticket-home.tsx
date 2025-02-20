@@ -1,37 +1,19 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Container3D } from "../components/Container3D";
 import Ticket from "../components/Ticket";
-import { FLAVORS } from "../flavors/data";
-import { signIn, signOut } from "next-auth/react";
+import { TRACKS as initialTracks } from "@/app/artist/tracks";
+import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-interface TicketHomeProps {
-  initialFlavor?: string;
-}
-
-export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
+export const TicketHome = () => {
   const { data: session, status } = useSession();
   const route = useRouter()
-  const [flavor, setFlavor] = useState(
-    FLAVORS[initialFlavor] ?? FLAVORS.twentyonepilots
-  );
+  const [tracks] = useState(initialTracks);
 
-  useEffect(() => {
-    if (initialFlavor) return;
-    const keys = Object.keys(FLAVORS);
-    const length = keys.length;
+  const trackSelected = tracks[0];
 
-    const intervalID = setInterval(() => {
-      const randomKey = keys[Math.floor(Math.random() * length)];
-      setFlavor(FLAVORS[randomKey]);
-    }, 2500);
-
-    return () => {
-      clearInterval(intervalID);
-    };
-  }, [initialFlavor]);
 
   return (
     <div>
@@ -40,7 +22,7 @@ export const TicketHome = ({ initialFlavor }: TicketHomeProps) => {
           <Container3D>
             <Ticket
               transition={true}
-              flavor={flavor}
+              flavor={trackSelected}
               user={{
                 avatar: session?.user?.image || "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true",
                 username: session?.user?.name || 'Clancy',

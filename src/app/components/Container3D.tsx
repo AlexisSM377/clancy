@@ -35,7 +35,7 @@ export const Container3D = ({ children }: Props) => {
                         <Atropos
                             highlight={true}
                             innerClassName="backdrop-blur-xl rounded-[60px]"
-                            className='block w-full h-auto mx-auto shadow-2xl md:aspect-[2/1] [box-sizing:border-box]'
+                            className='block w-full h-auto mx-auto md:aspect-[2/1] [box-sizing:border-box]'
                         >
                             {children}
                         </Atropos>
