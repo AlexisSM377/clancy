@@ -14,7 +14,6 @@ export const TicketHome = () => {
 
   const trackSelected = tracks[0];
 
-
   return (
     <div>
       <div className="block w-full h-full px-4">
@@ -22,7 +21,7 @@ export const TicketHome = () => {
           <Container3D>
             <Ticket
               transition={true}
-              flavor={trackSelected}
+              track={trackSelected}
               user={{
                 avatar: session?.user?.image || "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true",
                 username: session?.user?.name || 'Clancy',

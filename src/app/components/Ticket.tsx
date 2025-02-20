@@ -7,7 +7,7 @@ import { StreamingIcons } from './icons/streaming'
 interface Props {
     transition?: boolean
     className?: string
-    flavor: {
+    track: {
         id: string,
         track: string,
         album: string,
@@ -37,7 +37,7 @@ interface Props {
 export default function Ticket({
     transition = true,
     className,
-    flavor: { track, album, icon, colorPalette },
+    track: { track, album, icon, colorPalette },
     user,
     isSizeFixed = false,
     id,

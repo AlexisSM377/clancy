@@ -7,7 +7,7 @@ export const ALBUMS = [
         url: "https://i.scdn.co/image/ab67616d0000b2739cf15c7323fb85b7112197d5",
         height: 640,
         width: 640,
-      },
+      }
     ],
     name: "Clancy",
     colorPalette: {
@@ -17,7 +17,7 @@ export const ALBUMS = [
         inside: "border-red-400/10",
       },
       shadowColor: "shadow-red-200/15",
-    },
+    }
   },
   {
     total_tracks: 7,
