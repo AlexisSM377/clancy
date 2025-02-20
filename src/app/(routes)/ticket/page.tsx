@@ -40,8 +40,6 @@ export default function Page({
   const [tracks, setTracks] = useState(initialTracks);
   const [buttonText, setButtonText] = useState(STEPS_LOADING.ready);
   const [generatedImage, setGeneratedImage] = useState(null);
-
-  const { data: session } = useSession();
   const [albums] = useState(initialAlbums);
 
   useEffect(() => {
