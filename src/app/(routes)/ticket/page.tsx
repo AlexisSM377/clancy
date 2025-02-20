@@ -43,7 +43,7 @@ export default function Page({
         // Si deseas actualizar dinámicamente los tracks, puedes mapear los resultados filtrados
         const updatedTracks = filteredTracks.map((track) => {
           const album = albums.find((album) => album.id === track.album.id);
-        
+
           return {
             id: track.id,
             track: track.name,
@@ -53,13 +53,13 @@ export default function Page({
             colorPalette: album
               ? album.colorPalette
               : {
-                  bg: "bg-[#007acc]/50",
-                  borders: {
-                    inside: "border-blue-300/20",
-                    outside: "border-blue-400/10",
-                  },
-                  shadowColor: "shadow-blue-400/25"
+                bg: "bg-[#007acc]/50",
+                borders: {
+                  inside: "border-blue-300/20",
+                  outside: "border-blue-400/10",
                 },
+                shadowColor: "shadow-blue-400/25"
+              },
           };
         });
 
@@ -100,7 +100,7 @@ export default function Page({
                   "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true",
                 username: "Clancy",
               }}
-              handleRemoveTrack={() => {}}
+              handleRemoveTrack={() => { }}
             />
           )}
         </div>
@@ -128,7 +128,7 @@ export default function Page({
                         "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true",
                       username: "Clancy",
                     }}
-                    handleRemoveTrack={() => {}}
+                    handleRemoveTrack={() => { }}
                   />
                 )}
               </Container3D>
@@ -156,7 +156,7 @@ export default function Page({
                 className={cn(
                   "py-3 transition-all",
                   MATERIALS_LIST.STANDARD !== selectedMaterial &&
-                    "bg-transparent border-transparent"
+                  "bg-transparent border-transparent"
                 )}
                 variant="secondary"
               >
@@ -169,7 +169,7 @@ export default function Page({
                 className={cn(
                   "py-3 transition-all",
                   MATERIALS_LIST.PLATINUM !== selectedMaterial &&
-                    "bg-transparent border-transparent"
+                  "bg-transparent border-transparent"
                 )}
                 variant="secondary"
               >
@@ -182,11 +182,10 @@ export default function Page({
               {tracks.map((track, index) => (
                 <Tooltip key={track.id} text={track.track} offsetNumber={16}>
                   <button
-                    className={`relative flex w-12 h-12 transition cursor:pointer group ${
-                      index === trackIndex
-                        ? "scale-125 pointer-events-none contrast-125 before:absolute before:rounded-full before:w-2 before:h-2 before:left-0 before:right-0 before:-top-4 before:mx-auto before:bg-yellow-200"
-                        : ""
-                    }`}
+                    className={`relative flex w-12 h-12 transition cursor:pointer group ${index === trackIndex
+                      ? "scale-125 pointer-events-none contrast-125 before:absolute before:rounded-full before:w-2 before:h-2 before:left-0 before:right-0 before:-top-4 before:mx-auto before:bg-yellow-200"
+                      : ""
+                      }`}
                     onClick={() => setTrackIndex(index)}
                   >
                     <div className="flex items-center justify-center w-14 h-14 transition group-hover:scale-110">
@@ -203,10 +202,6 @@ export default function Page({
           </div>
         </div>
         <div className="flex flex-col items-center w-full px-8 mt-16 mb-16 gap-x-10 gap-y-4 lg:mb:0 lg:mt-4 md:flex-row">
-          <Button variant="secondary" type="button">
-            <InstagramIcon />
-            Compartir
-          </Button>
           <Button variant="secondary" type="button">
             <DownloadIcon />
             Descargar
