@@ -99,8 +99,8 @@ export default function Ticket({
                                 : 'md:w-auto row-[2/3] mb-8 md:mb-0 left-0 mx-auto md:mx-0 h-32 md:h-[40%] relative flex justify-center w-full md:block bottom-0 md:left-[25%] md:bottom-[20%] md:absolute'
                         )}
                     >
-                        <img className='absolute w-auto h-full' src={icon} />
-                        <img className='absolute w-auto h-full scale-150 blur-xl -z-10 opacity-90' key={`${username}-shadow`} src={icon} />
+                        <img className='absolute w-auto h-full' src={icon} alt="Track icon" />
+                        <img className='absolute w-auto h-full scale-150 blur-xl -z-10 opacity-90' key={`${username}-shadow`} src={icon} alt="Track icon shadow" />
                     </div>
                 }
                 <div

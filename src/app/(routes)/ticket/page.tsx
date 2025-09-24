@@ -39,7 +39,7 @@ export default function Page({
   const [albumIndex, setAlbumIndex] = useState(defaultAlbumIndex);
   const [tracks, setTracks] = useState(initialTracks);
   const [buttonText, setButtonText] = useState(STEPS_LOADING.ready);
-  const [generatedImage, setGeneratedImage] = useState(null);
+  const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [albums] = useState(initialAlbums);
 
   useEffect(() => {
@@ -47,13 +47,29 @@ export default function Page({
       try {
         const topTracks = await getTopTracks();
 
-        const filteredTracks = topTracks.items.filter((track) =>
-          track.artists.some((artist) => artist.id === TOP_ID)
+        interface Artist {
+          id: string;
+          name?: string;
+        }
+
+        interface Track {
+          id: string;
+          name: string;
+          artists: Artist[];
+          album: {
+            id: string;
+            name: string;
+            images: { url: string }[];
+          };
+        }
+
+        const filteredTracks = topTracks.items.filter((track: Track) =>
+          track.artists.some((artist: Artist) => artist.id === TOP_ID)
         );
 
         if (filteredTracks.length > 0) {
           // Si deseas actualizar dinámicamente los tracks, puedes mapear los resultados filtrados
-          const updatedTracks = filteredTracks.map((track) => {
+          const updatedTracks = filteredTracks.map((track: Track) => {
             const album = albums.find((album) => album.id === track.album.id);
 
             return {
@@ -84,7 +100,7 @@ export default function Page({
     };
 
     fetchTracks();
-  }, []);
+  }, [albums]);
 
   useEffect(() => {
     if (buttonText === STEPS_LOADING.generate) {
@@ -96,11 +112,6 @@ export default function Page({
       });
     }
   }, [buttonText]);
-
-  useEffect(() => {
-    setGeneratedImage(null);
-    setButtonText(STEPS_LOADING.generate);
-  }, [trackIndex, albumIndex, selectedMaterial]);
 
   const trackSelected = tracks[trackIndex];
   const albumSelected = albums[albumIndex];
@@ -219,7 +230,7 @@ export default function Page({
                       <div className="flex items-center justify-center w-14 h-14 transition group-hover:scale-110">
                         <img
                           src={track.icon} // Usamos la URL de la imagen
-                          alt={track.id} // Texto alternativo
+                          alt={track.track} // Texto alternativo
                           className="h-auto rounded-sm" // Clases CSS
                         />
                       </div>
@@ -233,9 +244,9 @@ export default function Page({
                 {albums.map((album, index) => (
                   <Tooltip key={album.id} text={album.name} offsetNumber={16}>
                     <button
-                      className={`relative flex w-12 h-12 transition cursor:pointer group ${index === albumIndex
-                        ? "scale-125 pointer-events-none contrast-125 before:absolute before:rounded-full before:w-2 before:h-2 before:left-0 before:right-0 before:-top-4 before:mx-auto before:bg-yellow-200"
-                        : ""
+                      className={`relative flex w-12 h-12 transition cursor:pointer group ${index === trackIndex
+                          ? "scale-125 pointer-events-none contrast-125 before:absolute before:rounded-full before:w-2 before:h-2 before:left-0 before:right-0 before:-top-4 before:mx-auto before:bg-yellow-200"
+                          : ""
                         }`}
                       onClick={() => setAlbumIndex(index)}
                     >
@@ -270,7 +281,6 @@ export default function Page({
               variant="secondary"
               type="button"
               onClick={() => setButtonText(STEPS_LOADING.generate)}
-              disabled={buttonText === STEPS_LOADING.generate}
             >
               <DownloadIcon />
               {buttonText}

@@ -43,7 +43,7 @@ export function Countdowm() {
 
         const intervalId = setInterval(updateCountdown, SECOND);
         return () => clearInterval(intervalId);
-    }, []);
+    }, [DAY, HOUR, MINUTE]);
 
     return (
         <section className="my-24 flex flex-col gap-y-10 justify-center items-center">
