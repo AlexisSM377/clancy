@@ -14,6 +14,7 @@ import { cn } from "@/app/lib/utils";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toJpeg } from "html-to-image";
+import Image from "next/image";
 
 const MATERIALS_LIST = {
   STANDARD: "standard",
@@ -28,15 +29,11 @@ const STEPS_LOADING = {
   sharing: 'Compartiendo...'
 };
 
-export default function Page({
-  defaultTrackIndex = 0,
-  defaultAlbumIndex = 0,
-  material: defaultMaterial = MATERIALS_LIST.STANDARD,
-}) {
+export default function Page() {
   const { data: session } = useSession(); // Obtener la sesión y el estado de autenticación
-  const [selectedMaterial, setSelectTrack] = useState(defaultMaterial);
-  const [trackIndex, setTrackIndex] = useState(defaultTrackIndex); // Usamos índice en lugar de ID
-  const [albumIndex, setAlbumIndex] = useState(defaultAlbumIndex);
+  const [selectedMaterial, setSelectTrack] = useState(MATERIALS_LIST.STANDARD);
+  const [trackIndex, setTrackIndex] = useState(0); // Usamos índice en lugar de ID
+  const [albumIndex, setAlbumIndex] = useState(0);
   const [tracks, setTracks] = useState(initialTracks);
   const [buttonText, setButtonText] = useState(STEPS_LOADING.ready);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -104,12 +101,15 @@ export default function Page({
 
   useEffect(() => {
     if (buttonText === STEPS_LOADING.generate) {
-      toJpeg(document.getElementById('ticket'), {
-        quality: 0.95,
-      }).then((dataURL) => {
-        setGeneratedImage(dataURL);
-        setButtonText(STEPS_LOADING.ready);
-      });
+      const ticketElement = document.getElementById('ticket');
+      if (ticketElement) {
+        toJpeg(ticketElement, {
+          quality: 0.95,
+        }).then((dataURL) => {
+          setGeneratedImage(dataURL);
+          setButtonText(STEPS_LOADING.ready);
+        });
+      }
     }
   }, [buttonText]);
 
@@ -228,9 +228,11 @@ export default function Page({
                       onClick={() => setTrackIndex(index)}
                     >
                       <div className="flex items-center justify-center w-14 h-14 transition group-hover:scale-110">
-                        <img
+                        <Image
                           src={track.icon} // Usamos la URL de la imagen
                           alt={track.track} // Texto alternativo
+                          width={56}
+                          height={56}
                           className="h-auto rounded-sm" // Clases CSS
                         />
                       </div>
@@ -251,9 +253,11 @@ export default function Page({
                       onClick={() => setAlbumIndex(index)}
                     >
                       <div className="flex items-center justify-center w-14 h-14 transition group-hover:scale-110">
-                        <img
+                        <Image
                           src={album.images[0].url} // Usamos la URL de la imagen
                           alt={album.name} // Texto alternativo
+                          width={56}
+                          height={56}
                           className="h-auto rounded-sm" // Clases CSS
                         />
                       </div>
