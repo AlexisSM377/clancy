@@ -1,18 +1,39 @@
 "use client";
-import { useState } from "react";
 import { Container3D } from "../components/Container3D";
 import Ticket from "../components/Ticket";
-import { TRACKS as initialTracks } from "@/app/artist/tracks";
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
+const FALLBACK_AVATAR =
+  "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true";
+
+const FALLBACK_TRACK = {
+  id: "preview",
+  track: "Preview",
+  album: "Album",
+  albumId: "preview-album",
+  icon: "/1.png",
+  colorPalette: {
+    bg: "bg-[#101E5B]/65",
+    borders: {
+      outside: "border-top-primary/10",
+      inside: "border-top-secondary/20",
+    },
+    shadowColor: "shadow-top-primary/25",
+  },
+};
+
+const FALLBACK_ARTIST = {
+  name: "Your Artist",
+  hashtag: "#spotifyartist",
+  url: "https://open.spotify.com",
+  eventName: "Create Your Ticket",
+};
+
 export const TicketHome = () => {
   const { data: session, status } = useSession();
-  const route = useRouter()
-  const [tracks] = useState(initialTracks);
-
-  const trackSelected = tracks[0];
+  const route = useRouter();
 
   return (
     <div>
@@ -21,10 +42,11 @@ export const TicketHome = () => {
           <Container3D>
             <Ticket
               transition={true}
-              track={trackSelected}
+              track={FALLBACK_TRACK}
+              artist={FALLBACK_ARTIST}
               user={{
-                avatar: session?.user?.image || "https://ishopmx.vtexassets.com/arquivos/ids/292869-800-auto?v=638508807931370000&width=800&height=auto&aspect=true",
-                username: session?.user?.name || 'Clancy',
+                avatar: session?.user?.image || FALLBACK_AVATAR,
+                username: session?.user?.name || "Fan",
               }}
             />
           </Container3D>
@@ -33,10 +55,9 @@ export const TicketHome = () => {
           {status === "authenticated" && (
             <button
               className="group relative h-12 w-72 overflow-hidden rounded-2xl bg-green-500 text-lg font-bold text-white"
-              onClick={() => route.push("/ticket")}
+              onClick={() => route.push("/select-artist")}
             >
-              Ver Ticket
-
+              Elegir artista
             </button>
           )}
           {status === "unauthenticated" && (
@@ -44,7 +65,7 @@ export const TicketHome = () => {
               className="group relative h-12 w-72 overflow-hidden rounded-2xl bg-green-500 text-lg font-bold text-white"
               onClick={async () => {
                 await signIn("spotify", {
-                  callbackUrl: "/ticket",
+                  callbackUrl: "/select-artist",
                   redirect: false,
                 });
               }}
