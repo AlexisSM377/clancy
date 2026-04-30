@@ -1,8 +1,7 @@
 "use client";
 import { Container3D } from "../components/Container3D";
 import Ticket from "../components/Ticket";
-import { signIn } from "next-auth/react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
 const FALLBACK_AVATAR =
@@ -32,7 +31,7 @@ const FALLBACK_ARTIST = {
 };
 
 export const TicketHome = () => {
-  const { data: session, status } = useSession();
+  const { data: session, isPending } = useSession();
   const route = useRouter();
 
   return (
@@ -52,7 +51,7 @@ export const TicketHome = () => {
           </Container3D>
         </div>
         <div className="flex flex-col items-center justify-center gap-4 mx-auto scale-90 md:flex-row sm:scale-100 py-[80px]">
-          {status === "authenticated" && (
+          {session && !isPending && (
             <button
               className="group relative h-12 w-72 overflow-hidden rounded-2xl bg-green-500 text-lg font-bold text-white"
               onClick={() => route.push("/select-artist")}
@@ -60,13 +59,13 @@ export const TicketHome = () => {
               Elegir artista
             </button>
           )}
-          {status === "unauthenticated" && (
+          {!session && !isPending && (
             <button
               className="group relative h-12 w-72 overflow-hidden rounded-2xl bg-green-500 text-lg font-bold text-white"
               onClick={async () => {
-                await signIn("spotify", {
-                  callbackUrl: "/select-artist",
-                  redirect: false,
+                await signIn.social({
+                  provider: "spotify",
+                  callbackURL: "/select-artist",
                 });
               }}
             >

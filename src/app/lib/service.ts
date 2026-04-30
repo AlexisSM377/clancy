@@ -1,14 +1,9 @@
-import { getSession } from "next-auth/react";
-
-// Extend the session type to include accessToken
-interface ExtendedSession {
-  accessToken?: string;
-  user?: {
-    name?: string;
-    email?: string;
-    image?: string;
-  };
-}
+const getAccessToken = async (): Promise<string | null> => {
+  const res = await fetch("/api/auth/spotify-token");
+  if (!res.ok) return null;
+  const { accessToken } = await res.json();
+  return accessToken ?? null;
+};
 
 export type SpotifyImage = {
   url: string;
@@ -77,16 +72,16 @@ const fetchSpotifyAPI = async (
   method: string = "GET",
   body?: unknown
 ) => {
-  const session = (await getSession()) as ExtendedSession;
+  const accessToken = await getAccessToken();
 
-  if (!session?.accessToken) {
+  if (!accessToken) {
     throw new Error("No hay una sesión activa o el token de acceso no está disponible.");
   }
 
   const options: RequestInit = {
     method,
     headers: {
-      Authorization: `Bearer ${session.accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
   };

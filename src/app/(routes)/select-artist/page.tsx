@@ -4,16 +4,16 @@ import { ArtistSelector } from "@/app/components/ArtistSelector";
 import { BackgroundTicket } from "@/app/components/BackgroundTicket";
 import { Button } from "@/app/components/Button";
 import { useSelectedArtist } from "@/app/hooks/useSelectedArtist";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, useSession } from "@/lib/auth-client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function SelectArtistPage() {
-  const { status } = useSession();
+  const { data: session, isPending } = useSession();
   const { selectedArtist, clearArtist, isHydrated } = useSelectedArtist();
   const router = useRouter();
 
-  if (status === "loading" || !isHydrated) {
+  if (isPending || !isHydrated) {
     return (
       <BackgroundTicket>
         <main className="mx-auto mt-40 flex min-h-[65vh] w-full max-w-5xl items-center justify-center px-4">
@@ -23,7 +23,7 @@ export default function SelectArtistPage() {
     );
   }
 
-  if (status === "unauthenticated") {
+  if (!session) {
     return (
       <BackgroundTicket>
         <main className="mx-auto mt-40 flex min-h-[65vh] w-full max-w-5xl flex-col items-center justify-center gap-5 px-4 text-center">
@@ -38,9 +38,9 @@ export default function SelectArtistPage() {
             type="button"
             variant="secondary"
             onClick={async () => {
-              await signIn("spotify", {
-                callbackUrl: "/select-artist",
-                redirect: true,
+              await signIn.social({
+                provider: "spotify",
+                callbackURL: "/select-artist",
               });
             }}
           >

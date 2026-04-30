@@ -19,7 +19,7 @@ import {
 } from "@/app/lib/service";
 import { cn } from "@/app/lib/utils";
 import { toJpeg } from "html-to-image";
-import { signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "@/lib/auth-client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -546,7 +546,9 @@ export default function Page() {
             type="button"
             className="ml-0 lg:ml-auto"
             onClick={() => {
-              signOut({ callbackUrl: "/" });
+              signOut({
+                fetchOptions: { onSuccess: () => router.push("/") },
+              });
             }}
           >
             <LogoutIcon />

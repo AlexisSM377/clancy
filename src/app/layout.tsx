@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
-import { SessionProvider } from "next-auth/react";
 import { ArtistProvider } from "./context/ArtistContext";
 // Supports weights 100-800
 import "@fontsource-variable/martian-mono";
@@ -23,9 +22,7 @@ export default function RootLayout({
         <Header />
         <main id="content" className="shrink-0">
           <div>
-            <SessionProvider>
-              <ArtistProvider>{children}</ArtistProvider>
-            </SessionProvider>
+            <ArtistProvider>{children}</ArtistProvider>
           </div>
         </main>
         <Footer />
