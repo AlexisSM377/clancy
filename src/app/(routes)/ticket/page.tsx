@@ -333,7 +333,7 @@ export default function Page() {
   if (!isHydrated || !selectedArtist) {
     return (
       <BackgroundTicket>
-        <main className="mx-auto mt-40 flex min-h-[65vh] w-full max-w-5xl items-center justify-center px-4">
+        <main className="mx-auto mt-8 flex min-h-[65vh] w-full max-w-5xl items-center justify-center px-4">
           <p className="text-sm text-white/80">Cargando ticket...</p>
         </main>
       </BackgroundTicket>
@@ -381,7 +381,7 @@ export default function Page() {
         </div>
       </div>
 
-      <main className="mx-auto mt-40 flex max-w-screen-xl flex-col items-center gap-8 px-4 pb-20 lg:grid grid-cols-[auto_1fr]">
+      <main className="mx-auto mt-8 flex max-w-screen-xl flex-col items-center gap-8 px-4 pb-20 lg:grid grid-cols-[auto_1fr]">
         <div>
           <div className="w-auto">
             <div className="mx-auto max-w-[400px] md:w-[700px] md:max-w-[700px]">
