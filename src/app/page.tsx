@@ -9,6 +9,48 @@ import { VinylCloseSVG } from "./components/vinyl/VinylCloseSVG";
 import { TurntableSVG } from "./components/vinyl/TurntableSVG";
 import { VinylSVG } from "./components/vinyl/VinylSVG";
 import { WaveBars } from "./components/vinyl/WaveBars";
+import Ticket from "./components/Ticket";
+import { Container3D } from "./components/Container3D";
+import { getTopArtists, getTopTracks } from "./lib/service";
+
+const FALLBACK_TRACK = {
+  id: "fallback-track",
+  track: "Top Track",
+  album: "Top Album",
+  albumId: "fallback-album",
+  icon: "/1.png",
+  colorPalette: {
+    bg: "bg-[#007acc]/50",
+    borders: { outside: "border-blue-300/20", inside: "border-blue-400/10" },
+    shadowColor: "shadow-blue-400/25",
+  },
+};
+
+const FALLBACK_ARTIST = {
+  name: "Tu Artista Favorito",
+  hashtag: "#tuartista",
+  url: "https://open.spotify.com",
+  eventName: "Spotify Fan Ticket",
+};
+
+const PALETTES = [
+  { bg: "bg-[#D62420]/65", borders: { outside: "border-red-300/20", inside: "border-red-400/10" }, shadowColor: "shadow-red-200/15" },
+  { bg: "bg-[#007acc]/50", borders: { inside: "border-blue-300/20", outside: "border-blue-400/10" }, shadowColor: "shadow-blue-400/25" },
+  { bg: "bg-[#00ADD8]/50", borders: { inside: "border-cyan-300/20", outside: "border-cyan-400/10" }, shadowColor: "shadow-cyan-400/20" },
+  { bg: "bg-[#FFD800]/50", borders: { outside: "border-yellow-300/20", inside: "border-yellow-400/10" }, shadowColor: "shadow-yellow-200/15" },
+  { bg: "bg-[#1f2937]/65", borders: { outside: "border-slate-300/20", inside: "border-slate-400/10" }, shadowColor: "shadow-slate-400/25" },
+  { bg: "bg-[#4f46e5]/55", borders: { outside: "border-indigo-300/20", inside: "border-indigo-400/10" }, shadowColor: "shadow-indigo-300/20" },
+];
+
+const getPaletteFromSeed = (seed: string) => {
+  const total = seed.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return PALETTES[total % PALETTES.length];
+};
+
+const toHashtag = (value: string) => {
+  const normalized = value.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-zA-Z0-9]+/g, "").toLowerCase();
+  return `#${normalized || "spotifyartist"}`;
+};
 
 const INK = "#1a1612";
 const PAPER = "#f5f0e8";
@@ -22,6 +64,8 @@ export default function LandingPage() {
   const [vis, setVis] = useState(false);
   const [angle, setAngle] = useState(0);
   const rafRef = useRef<number | null>(null);
+  const [previewTrack, setPreviewTrack] = useState(FALLBACK_TRACK);
+  const [previewArtist, setPreviewArtist] = useState(FALLBACK_ARTIST);
 
   useEffect(() => {
     const t = setTimeout(() => setVis(true), 80);
@@ -36,6 +80,35 @@ export default function LandingPage() {
     rafRef.current = requestAnimationFrame(tick);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
   }, []);
+
+  useEffect(() => {
+    if (!session) return;
+    Promise.all([
+      getTopTracks(1, "short_term"),
+      getTopArtists(1, "medium_term"),
+    ]).then(([tracksRes, artistsRes]) => {
+      const track = tracksRes.items[0];
+      const artist = artistsRes.items[0];
+      if (track) {
+        setPreviewTrack({
+          id: track.id,
+          track: track.name,
+          album: track.album.name,
+          albumId: track.album.id,
+          icon: track.album.images?.[0]?.url || "/1.png",
+          colorPalette: getPaletteFromSeed(track.album.id || track.id),
+        });
+      }
+      if (artist) {
+        setPreviewArtist({
+          name: artist.name,
+          hashtag: toHashtag(artist.name),
+          url: artist.external_urls?.spotify || "https://open.spotify.com",
+          eventName: "Spotify Fan Ticket",
+        });
+      }
+    }).catch(() => {});
+  }, [session]);
 
   const handleCTA = async () => {
     if (session) {
@@ -58,7 +131,7 @@ export default function LandingPage() {
           "nav   nav   nav  " 52px
           "left  main  side " 1fr
           "foot  foot  foot " 44px
-          / 38%  1fr   280px
+          / 38%  1fr   380px
         `,
         opacity: vis ? 1 : 0,
         transition: "opacity 0.5s ease",
@@ -143,15 +216,55 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* MAIN HEADLINE */}
+      {/* MAIN: TICKET PREVIEW */}
       <div style={{
         gridArea: "main",
         borderRight: `2px solid ${INK}`,
         display: "flex",
         flexDirection: "column",
+        alignItems: "center",
         justifyContent: "center",
-        padding: "40px 48px",
+        padding: "32px 40px",
         background: PAPER,
+        gap: 16,
+      }}>
+        <div style={{
+          fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: 3,
+          textTransform: "uppercase", color: "rgba(26,22,18,0.35)",
+          alignSelf: "flex-start",
+        }}>PREVIEW</div>
+
+        <div style={{ width: "100%", maxWidth: 620 }}>
+          <Container3D>
+            <Ticket
+              isSizeFixed
+              transition={false}
+              track={previewTrack}
+              user={{
+                username: session?.user?.name || "Fan",
+                avatar: session?.user?.image ?? undefined,
+              }}
+              artist={previewArtist}
+            />
+          </Container3D>
+        </div>
+
+        <div style={{
+          fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(26,22,18,0.3)",
+          letterSpacing: 1.5, textTransform: "uppercase", alignSelf: "flex-start",
+        }}>
+          Mueve el mouse sobre el ticket
+        </div>
+      </div>
+
+      {/* SIDE: HEADLINE + CTA */}
+      <div style={{
+        gridArea: "side",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        padding: "40px 32px",
+        background: PAPER2,
         gap: 20,
       }}>
         <div style={{
@@ -165,7 +278,7 @@ export default function LandingPage() {
 
         <h1 style={{
           fontFamily: "var(--font-serif)",
-          fontSize: "clamp(40px,4.5vw,78px)",
+          fontSize: "clamp(32px,3vw,54px)",
           lineHeight: 0.9,
           letterSpacing: -2,
           color: INK,
@@ -176,8 +289,7 @@ export default function LandingPage() {
         </h1>
 
         <p style={{
-          fontSize: 14, lineHeight: 1.7, color: "rgba(26,22,18,0.55)",
-          maxWidth: 340, marginTop: 4,
+          fontSize: 13, lineHeight: 1.7, color: "rgba(26,22,18,0.55)", marginTop: 4,
         }}>
           Conecta con Spotify, elige tu artista favorito
           y genera tu fan ticket personalizado con tus
@@ -225,63 +337,6 @@ export default function LandingPage() {
               {t}
             </span>
           ))}
-        </div>
-      </div>
-
-      {/* RIGHT: TICKET PREVIEW */}
-      <div style={{
-        gridArea: "side",
-        display: "flex", flexDirection: "column",
-        alignItems: "center", justifyContent: "center",
-        padding: "32px 24px",
-        background: PAPER2,
-        gap: 24,
-      }}>
-        <div style={{
-          fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: 3,
-          textTransform: "uppercase", color: "rgba(26,22,18,0.35)",
-        }}>PREVIEW</div>
-
-        {/* Mini ticket preview */}
-        <div style={{
-          width: 260, height: 150,
-          borderRadius: 10,
-          background: "linear-gradient(135deg, #1a1612 0%, #2e2820 60%, #241e18 100%)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          boxShadow: "0 2px 0 rgba(255,255,255,0.04) inset, 0 24px 60px rgba(0,0,0,0.45)",
-          position: "relative",
-          overflow: "hidden",
-          animation: vis ? "floatTicket 3.5s ease-in-out infinite" : "none",
-          flexShrink: 0,
-        }}>
-          <div style={{
-            position: "absolute", left: 0, top: 0, bottom: 0, width: 16,
-            background: TEAL,
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <span style={{
-              fontFamily: "var(--font-mono)", fontSize: 5, fontWeight: 700,
-              color: "#fff", letterSpacing: 2, writingMode: "vertical-rl",
-              textTransform: "uppercase", transform: "rotate(180deg)",
-            }}>musix</span>
-          </div>
-          <div style={{ position: "absolute", left: 24, right: 0, top: 0, bottom: 0, padding: "10px 12px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div style={{ fontWeight: 700, fontSize: 9, color: "#fff" }}>{session?.user?.name || "Fan"}</div>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 6, color: "rgba(255,255,255,0.4)" }}>May. 2026</div>
-            </div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 7, color: TEAL, letterSpacing: 1.5 }}>SPOTIFY FAN TICKET</div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 7, color: "rgba(255,255,255,0.3)", letterSpacing: 1 }}>Elige tu artista →</div>
-          </div>
-        </div>
-
-        <VinylSVG size={56} labelColor="#d4824a" spinning />
-
-        <div style={{
-          fontFamily: "var(--font-mono)", fontSize: 9, color: "rgba(26,22,18,0.3)",
-          textAlign: "center", lineHeight: 1.6, letterSpacing: 0.5,
-        }}>
-          Personaliza tu ticket<br />con tu artista favorito
         </div>
       </div>
 

@@ -332,7 +332,7 @@ export default function Page() {
 
   if (!isHydrated || !selectedArtist) {
     return (
-      <BackgroundTicket>
+      <BackgroundTicket artistImage={selectedArtist?.image}>
         <main className="mx-auto mt-8 flex min-h-[65vh] w-full max-w-5xl items-center justify-center px-4">
           <p className="text-sm text-white/80">Cargando ticket...</p>
         </main>
@@ -351,7 +351,7 @@ export default function Page() {
   };
 
   return (
-    <BackgroundTicket>
+    <BackgroundTicket artistImage={selectedArtist.image}>
       <div aria-disabled className="relative -left-[200vw] -mb-[366px] w-[800px]">
         <div id="ticket" className="border-[16px] border-transparent">
           {selectedMaterial === MATERIALS_LIST.STANDARD && (
