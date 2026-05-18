@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --paper:  #f5f0e8;
+  --paper2: #ede6d6;
+  --paper3: #e4dcc8;
+  --ink:    #1a1612;
+  --ink2:   #2e2820;
+  --wood:   #c8924a;
+  --teal:   #4a8a90;
+  --orange: #d4824a;
+  --red:    #b83a20;
+}
+
+@keyframes bar1 { 0%,100%{height:6px}  50%{height:22px} }
+@keyframes bar2 { 0%,100%{height:16px} 50%{height:6px}  }
+@keyframes bar3 { 0%,100%{height:10px} 50%{height:26px} }
+@keyframes bar4 { 0%,100%{height:20px} 50%{height:8px}  }
+@keyframes bar5 { 0%,100%{height:8px}  50%{height:18px} }
+@keyframes spinLP { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+@keyframes floatTicket { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-8px) rotate(-2deg)} }
+
 html {
   scroll-behavior: smooth;
 }

@@ -18,6 +18,17 @@ const config: Config = {
           primary: "#0099FF",
           secondary: "#DEF2FF",
         },
+        vinyl: {
+          paper:  "#f5f0e8",
+          paper2: "#ede6d6",
+          paper3: "#e4dcc8",
+          ink:    "#1a1612",
+          ink2:   "#2e2820",
+          wood:   "#c8924a",
+          teal:   "#4a8a90",
+          orange: "#d4824a",
+          red:    "#b83a20",
+        },
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

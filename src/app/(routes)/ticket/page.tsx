@@ -19,7 +19,7 @@ import {
 } from "@/app/lib/service";
 import { cn } from "@/app/lib/utils";
 import { toJpeg } from "html-to-image";
-import { signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "@/lib/auth-client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -332,8 +332,8 @@ export default function Page() {
 
   if (!isHydrated || !selectedArtist) {
     return (
-      <BackgroundTicket>
-        <main className="mx-auto mt-40 flex min-h-[65vh] w-full max-w-5xl items-center justify-center px-4">
+      <BackgroundTicket artistImage={selectedArtist?.image}>
+        <main className="mx-auto mt-8 flex min-h-[65vh] w-full max-w-5xl items-center justify-center px-4">
           <p className="text-sm text-white/80">Cargando ticket...</p>
         </main>
       </BackgroundTicket>
@@ -351,7 +351,7 @@ export default function Page() {
   };
 
   return (
-    <BackgroundTicket>
+    <BackgroundTicket artistImage={selectedArtist.image}>
       <div aria-disabled className="relative -left-[200vw] -mb-[366px] w-[800px]">
         <div id="ticket" className="border-[16px] border-transparent">
           {selectedMaterial === MATERIALS_LIST.STANDARD && (
@@ -381,7 +381,7 @@ export default function Page() {
         </div>
       </div>
 
-      <main className="mx-auto mt-40 flex max-w-screen-xl flex-col items-center gap-8 px-4 pb-20 lg:grid grid-cols-[auto_1fr]">
+      <main className="mx-auto mt-8 flex max-w-screen-xl flex-col items-center gap-8 px-4 pb-20 lg:grid grid-cols-[auto_1fr]">
         <div>
           <div className="w-auto">
             <div className="mx-auto max-w-[400px] md:w-[700px] md:max-w-[700px]">
@@ -546,7 +546,9 @@ export default function Page() {
             type="button"
             className="ml-0 lg:ml-auto"
             onClick={() => {
-              signOut({ callbackUrl: "/" });
+              signOut({
+                fetchOptions: { onSuccess: () => router.push("/") },
+              });
             }}
           >
             <LogoutIcon />

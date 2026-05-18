@@ -1,15 +1,28 @@
 import type { Metadata } from "next";
-import { Header } from "./components/Header";
-import { Footer } from "./components/Footer";
-import { SessionProvider } from "next-auth/react";
 import { ArtistProvider } from "./context/ArtistContext";
-// Supports weights 100-800
+import { Space_Grotesk, Space_Mono, DM_Serif_Display } from "next/font/google";
 import "@fontsource-variable/martian-mono";
 import "./globals.css";
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-body",
+});
+const spaceMono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-mono",
+});
+const dmSerif = DM_Serif_Display({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+});
+
 export const metadata: Metadata = {
-  title: "Clancy",
-  description: "The Clancy World Tour",
+  title: "Musix — Fan Ticket",
+  description: "Tu música, tu ticket",
 };
 
 export default function RootLayout({
@@ -18,17 +31,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="flex flex-col h-full">
-        <Header />
-        <main id="content" className="shrink-0">
-          <div>
-            <SessionProvider>
-              <ArtistProvider>{children}</ArtistProvider>
-            </SessionProvider>
-          </div>
-        </main>
-        <Footer />
+    <html lang="es" className={`${spaceGrotesk.variable} ${spaceMono.variable} ${dmSerif.variable}`}>
+      <body className="h-screen overflow-hidden">
+        <ArtistProvider>{children}</ArtistProvider>
       </body>
     </html>
   );
