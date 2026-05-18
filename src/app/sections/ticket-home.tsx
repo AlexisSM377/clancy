@@ -14,12 +14,10 @@ const FALLBACK_TRACK = {
   albumId: "preview-album",
   icon: "/1.png",
   colorPalette: {
-    bg: "bg-[#101E5B]/65",
-    borders: {
-      outside: "border-top-primary/10",
-      inside: "border-top-secondary/20",
-    },
-    shadowColor: "shadow-top-primary/25",
+    bg: "#0c1d32",
+    bgOverlay: "rgba(12,29,50,0.62)",
+    accent: "#3872a8",
+    dim: "rgba(56,114,168,0.22)",
   },
 };
 

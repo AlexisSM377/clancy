@@ -2,6 +2,7 @@
 import { cn } from "../lib/utils";
 import { StreamingIcons } from "./icons/streaming";
 import { TopLogo } from "./logos/top";
+import type { TicketColorPalette } from "./Ticket";
 
 interface Props {
   transition?: boolean;
@@ -15,14 +16,7 @@ interface Props {
       width: number;
     }[];
     name: string;
-    colorPalette: {
-      bg: string;
-      borders: {
-        outside: string;
-        inside: string;
-      };
-      shadowColor: string;
-    };
+    colorPalette: TicketColorPalette;
   };
   user: {
     username: string;
@@ -33,24 +27,39 @@ interface Props {
     hashtag?: string;
     url?: string;
     eventName?: string;
+    followers?: number | null;
+    genre?: string | null;
+    image?: string;
   };
   isSizeFixed?: boolean;
   idPrimary?: string;
 }
 
+const formatFollowers = (count: number) => {
+  if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M seguidores`;
+  if (count >= 1_000) return `${(count / 1_000).toFixed(1)}K seguidores`;
+  return `${count} seguidores`;
+};
+
 const toHashtag = (value: string) => {
   const normalized = value
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-zA-Z0-9]+/g, "")
     .toLowerCase();
-
   return `#${normalized || "spotifyartist"}`;
+};
+
+const FALLBACK_PALETTE: TicketColorPalette = {
+  bg: "#0c1d32",
+  bgOverlay: "rgba(12,29,50,0.62)",
+  accent: "#3872a8",
+  dim: "rgba(56,114,168,0.22)",
 };
 
 export default function TicketPlatinum({
   transition = true,
-  album: { id, images, name },
+  album: { images, name, colorPalette },
   user,
   artist,
   isSizeFixed = false,
@@ -60,15 +69,23 @@ export default function TicketPlatinum({
   const artistHashtag = artist?.hashtag?.trim() || toHashtag(artistName);
   const artistUrl = artist?.url || "https://open.spotify.com";
   const eventName = artist?.eventName?.trim() || "Spotify Fan Ticket";
+  const followers = artist?.followers ?? null;
+  const genre = artist?.genre ?? null;
+  const artistImage = artist?.image;
+
+  const palette = colorPalette ?? FALLBACK_PALETTE;
 
   return (
     <div
-      id={id}
       className={cn(
-        "block h-full overflow-hidden rounded-[35px] border-2 border-transparent p-5",
+        "block h-full overflow-hidden rounded-[35px] p-5",
         isSizeFixed ? "aspect-[2/1] w-full" : "aspect-none w-full md:aspect-[2/1]",
         transition ? "transition duration-500 ease-in-out" : ""
       )}
+      style={{
+        border: `1px solid ${palette.dim}`,
+        boxShadow: `inset 0 4px 30px 0 ${palette.dim}`,
+      }}
     >
       <div
         className={cn(
@@ -76,15 +93,22 @@ export default function TicketPlatinum({
           isSizeFixed ? "flex" : "grid md:flex",
           transition ? "transition duration-500 ease-in-out" : ""
         )}
+        style={{ backgroundImage: `url(${images[0].url})` }}
       >
-        <div className="absolute w-1/2 rotate-45 h-[300%] left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#41b3ff00] via-[#b0a9ff13] to-[#41b3ff00]" />
+        {/* Palette tint over album art */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: palette.bgOverlay, zIndex: 1 }}
+        />
+
         <span
           className={cn(
-            "h-full text-center text-[#FFD800] font-bold uppercase",
+            "relative h-full text-center text-[#FFD800] font-bold uppercase",
             isSizeFixed
               ? "ticket-dash-border px-4 text-2xl py-0 leading-none [writing-mode:vertical-lr]"
               : "ticket-dash-border-top row-[3/4] px-4 py-4 md:py-0 text-2xl md:px-4 md:text-xl md:[writing-mode:vertical-lr] md:ticket-dash-border"
           )}
+          style={{ zIndex: 10 }}
         >
           {artistName}
         </span>
@@ -97,22 +121,24 @@ export default function TicketPlatinum({
               ? "absolute bottom-[20%] left-[25%] mb-0 h-[40%] w-auto block"
               : "md:w-auto row-[2/3] mb-8 md:mb-0 left-0 mx-auto md:mx-0 h-32 md:h-[40%] relative flex justify-center w-full md:block bottom-0 md:left-[25%] md:bottom-[20%] md:absolute"
           )}
+          style={{ zIndex: 20 }}
         >
           <img src={images[0].url} alt="Album cover" className="absolute z-40 w-auto h-full" />
           <img
             src={images[0].url}
-            alt="Album cover blur"
+            alt=""
             className="absolute w-auto h-full scale-105 blur-xl -z-10 opacity-40"
           />
         </div>
 
         <div
           className={cn(
-            "z-10 grid w-full grid-rows-2",
+            "grid w-full grid-rows-2",
             isSizeFixed
               ? "h-full pd-0 grid-rows-2"
               : "h-auto md:h-full pt-5 md:pt-0 grid-rows-[1fr_auto] md:grid-rows-2"
           )}
+          style={{ zIndex: 10, position: "relative" }}
         >
           <div className={cn("grid", isSizeFixed ? "grid-cols-2" : "md:grid-cols-2")}>
             <div className="h-max">
@@ -137,7 +163,7 @@ export default function TicketPlatinum({
                     height="78"
                   />
                   <div>
-                    <p className="text-lg font-bold">{username}</p>
+                    <p className="text-lg font-bold text-white">{username}</p>
                     <span className="block px-3 py-1 mt-1 text-xs font-medium rounded-tl rounded-br rounded-bl-xl rounded-tr-xl w-max text-white/80 bg-white/10 uppercase">
                       {eventName}
                     </span>
@@ -161,24 +187,31 @@ export default function TicketPlatinum({
                 avatar == null ? "hidden" : ""
               )}
             >
-              <TopLogo className={cn("order-1 h-auto", isSizeFixed ? "ml-auto" : "ml-0 md:ml-auto")} />
-              <time
-                dateTime="2025-02-20T9:00:00"
+              {artistImage ? (
+                <img
+                  src={artistImage}
+                  alt={artistName}
+                  className={cn("order-1 h-10 w-10 rounded-full object-cover", isSizeFixed ? "ml-auto" : "ml-0 md:ml-auto")}
+                />
+              ) : (
+                <TopLogo className={cn("order-1 h-auto", isSizeFixed ? "ml-auto" : "ml-0 md:ml-auto")} />
+              )}
+              <div
                 className={cn(
                   "block mt-2 ml-auto font-bold text-right text-white md:ml-0",
                   isSizeFixed ? "text-right mr-0" : "text-center mr-auto md:mr-0 md:text-right"
                 )}
               >
-                Feb. 20 2025
+                {followers !== null ? formatFollowers(followers) : "—"}
                 <span
                   className={cn(
-                    "block text-sm font-normal text-white/60",
+                    "block text-sm font-normal text-white/60 capitalize",
                     !isSizeFixed && "animate-blurred-fade-in"
                   )}
                 >
-                  9 p. m. CDMX
+                  {genre ?? "—"}
                 </span>
-              </time>
+              </div>
             </div>
           </div>
 
@@ -226,7 +259,7 @@ export default function TicketPlatinum({
             >
               {artistHashtag}
             </a>
-            <p className="truncate mr-5 py-7 font-bold uppercase text-center">{name}</p>
+            <p className="truncate mr-5 py-7 font-bold uppercase text-center text-white">{name}</p>
           </div>
         </div>
       </div>

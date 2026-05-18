@@ -4,13 +4,11 @@ import { cn } from "../lib/utils";
 import { StreamingIcons } from "./icons/streaming";
 import { TopLogo } from "./logos/top";
 
-type TicketColorPalette = {
+export type TicketColorPalette = {
   bg: string;
-  borders: {
-    outside: string;
-    inside: string;
-  };
-  shadowColor: string;
+  bgOverlay: string;
+  accent: string;
+  dim: string;
 };
 
 interface Props {
@@ -33,6 +31,9 @@ interface Props {
     hashtag?: string;
     url?: string;
     eventName?: string;
+    followers?: number | null;
+    genre?: string | null;
+    image?: string;
   };
   isSizeFixed?: boolean;
   id?: string;
@@ -43,14 +44,26 @@ interface Props {
   };
 }
 
+const formatFollowers = (count: number) => {
+  if (count >= 1_000_000) return `${(count / 1_000_000).toFixed(1)}M seguidores`;
+  if (count >= 1_000) return `${(count / 1_000).toFixed(1)}K seguidores`;
+  return `${count} seguidores`;
+};
+
 const toHashtag = (value: string) => {
   const normalized = value
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .replace(/[^a-zA-Z0-9]+/g, "")
     .toLowerCase();
-
   return `#${normalized || "spotifyartist"}`;
+};
+
+const FALLBACK_PALETTE: TicketColorPalette = {
+  bg: "#0c1d32",
+  bgOverlay: "rgba(12,29,50,0.62)",
+  accent: "#3872a8",
+  dim: "rgba(56,114,168,0.22)",
 };
 
 export default function Ticket({
@@ -69,41 +82,40 @@ export default function Ticket({
   const artistHashtag = artist?.hashtag?.trim() || toHashtag(artistName);
   const artistUrl = artist?.url || "https://open.spotify.com";
   const eventName = artist?.eventName?.trim() || "Spotify Fan Ticket";
+  const followers = artist?.followers ?? null;
+  const genre = artist?.genre ?? null;
+  const artistImage = artist?.image;
 
-  const currentTicketStyles = {
-    background: colorPalette?.bg ?? "bg-[#101E5B]/65",
-    borders: {
-      outside: colorPalette?.borders.outside ?? "border-top-primary/10",
-      inside: colorPalette?.borders.inside ?? "border-top-secondary/20",
-    },
-    shadowColor: colorPalette?.shadowColor ?? "shadow-top-primary/25",
-  };
+  const palette = colorPalette ?? FALLBACK_PALETTE;
 
   return (
     <div
       id={id}
       className={cn(
-        "block h-full overflow-hidden opacity-100 rounded-[60px] shadow-[inset_0_4px_30px] bg-transparent border p-5",
+        "block h-full overflow-hidden rounded-[60px] p-5",
         isSizeFixed ? "aspect-[2/1] w-full" : "aspect-none w-full md:aspect-[2/1]",
-        currentTicketStyles.borders.outside,
-        currentTicketStyles.shadowColor,
         transition ? "transition duration-500 ease-in-out" : "",
         className
       )}
+      style={{
+        border: `1px solid ${palette.dim}`,
+        boxShadow: `inset 0 4px 30px 0 ${palette.dim}`,
+      }}
     >
       <div
         className={cn(
-          "relative h-full overflow-hidden border rounded-[40px]",
+          "relative h-full overflow-hidden rounded-[40px]",
           isSizeFixed ? "flex" : "grid md:flex",
-          currentTicketStyles.background,
-          currentTicketStyles.borders.inside,
           transition ? "transition duration-500 ease-in-out" : ""
         )}
+        style={{
+          background: palette.bg,
+          border: `1px solid ${palette.dim}`,
+        }}
       >
-        <div className="absolute w-1/2 rotate-45 h-[300%] left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-[#41b3ff00] via-[#b0a9ff13] to-[#41b3ff00]" />
         <span
           className={cn(
-            "h-full text-center text-[#FFD800] font-bold uppercase",
+            "relative z-[10] h-full text-center text-[#FFD800] font-bold uppercase",
             isSizeFixed
               ? "ticket-dash-border px-4 text-2xl py-0 leading-none [writing-mode:vertical-lr]"
               : "ticket-dash-border-top row-[3/4] px-4 py-4 md:py-0 text-2xl md:px-4 md:text-xl md:[writing-mode:vertical-lr] md:ticket-dash-border"
@@ -126,13 +138,13 @@ export default function Ticket({
             className="absolute w-auto h-full scale-150 blur-xl -z-10 opacity-90"
             key={`${username}-shadow`}
             src={icon}
-            alt="Track icon shadow"
+            alt=""
           />
         </div>
 
         <div
           className={cn(
-            "z-10 grid w-full grid-rows-2",
+            "relative z-[10] grid w-full grid-rows-2",
             isSizeFixed
               ? "h-full pd-0 grid-rows-2"
               : "h-auto md:h-full pt-5 md:pt-0 grid-rows-[1fr_auto] md:grid-rows-2"
@@ -184,24 +196,31 @@ export default function Ticket({
                   : `${avatar ? "hidden" : "flex"} md:block flex-col-reverse md:flex-row`
               )}
             >
-              <TopLogo className={cn("order-1 h-auto", isSizeFixed ? "ml-auto" : "ml-0 md:ml-auto")} />
-              <time
-                dateTime="2025-02-20T9:00:00"
+              {artistImage ? (
+                <img
+                  src={artistImage}
+                  alt={artistName}
+                  className={cn("order-1 h-10 w-10 rounded-full object-cover", isSizeFixed ? "ml-auto" : "ml-0 md:ml-auto")}
+                />
+              ) : (
+                <TopLogo className={cn("order-1 h-auto", isSizeFixed ? "ml-auto" : "ml-0 md:ml-auto")} />
+              )}
+              <div
                 className={cn(
                   "block mt-2 ml-auto font-bold text-right text-white md:ml-0",
                   isSizeFixed ? "text-right mr-0" : "text-center mr-auto md:mr-0 md:text-right"
                 )}
               >
-                Feb. 20 2025
+                {followers !== null ? formatFollowers(followers) : "—"}
                 <span
                   className={cn(
-                    "block text-sm font-normal text-white/60 mt-3",
+                    "block text-sm font-normal text-white/60 mt-3 capitalize",
                     !isSizeFixed && "animate-blurred-fade-in"
                   )}
                 >
-                  9 p. m. CDMX
+                  {genre ?? "—"}
                 </span>
-              </time>
+              </div>
             </div>
           </div>
 
@@ -226,18 +245,7 @@ export default function Ticket({
                         aria-label="Borrar cancion"
                         className="absolute top-0 right-0 items-center justify-center hidden w-4 h-4 text-sm transition-transform border rounded-full group-hover:flex hover:scale-125 bg-red-400/60 justify-items-center border-white/60"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="w-3 h-3"
-                        >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3">
                           <line x1="18" y1="6" x2="6" y2="18" />
                           <line x1="6" y1="6" x2="18" y2="18" />
                         </svg>
@@ -259,24 +267,8 @@ export default function Ticket({
                   ) : (
                     <>
                       {handleRemoveTrack != null && (
-                        <div
-                          className={cn(
-                            "flex items-center justify-center w-12 h-12 p-2 border border-dashed rounded-lg opacity-20",
-                            isSizeFixed && "hidden"
-                          )}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="w-6 h-6"
-                          >
+                        <div className={cn("flex items-center justify-center w-12 h-12 p-2 border border-dashed rounded-lg opacity-20", isSizeFixed && "hidden")}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <path d="M5 13a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-6z" />
                             <path d="M11 16a1 1 0 1 0 2 0a1 1 0 0 0 -2 0" />
@@ -335,7 +327,7 @@ export default function Ticket({
               {artistHashtag}
             </a>
 
-            <p className="truncate mr-5 py-7 font-bold uppercase text-center">{track}</p>
+            <p className="truncate mr-5 py-7 font-bold uppercase text-center text-white">{track}</p>
           </div>
         </div>
       </div>

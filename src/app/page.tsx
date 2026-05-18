@@ -20,9 +20,10 @@ const FALLBACK_TRACK = {
   albumId: "fallback-album",
   icon: "/1.png",
   colorPalette: {
-    bg: "bg-[#007acc]/50",
-    borders: { outside: "border-blue-300/20", inside: "border-blue-400/10" },
-    shadowColor: "shadow-blue-400/25",
+    bg: "#0c1d32",
+    bgOverlay: "rgba(12,29,50,0.62)",
+    accent: "#3872a8",
+    dim: "rgba(56,114,168,0.22)",
   },
 };
 
@@ -34,12 +35,12 @@ const FALLBACK_ARTIST = {
 };
 
 const PALETTES = [
-  { bg: "bg-[#D62420]/65", borders: { outside: "border-red-300/20", inside: "border-red-400/10" }, shadowColor: "shadow-red-200/15" },
-  { bg: "bg-[#007acc]/50", borders: { inside: "border-blue-300/20", outside: "border-blue-400/10" }, shadowColor: "shadow-blue-400/25" },
-  { bg: "bg-[#00ADD8]/50", borders: { inside: "border-cyan-300/20", outside: "border-cyan-400/10" }, shadowColor: "shadow-cyan-400/20" },
-  { bg: "bg-[#FFD800]/50", borders: { outside: "border-yellow-300/20", inside: "border-yellow-400/10" }, shadowColor: "shadow-yellow-200/15" },
-  { bg: "bg-[#1f2937]/65", borders: { outside: "border-slate-300/20", inside: "border-slate-400/10" }, shadowColor: "shadow-slate-400/25" },
-  { bg: "bg-[#4f46e5]/55", borders: { outside: "border-indigo-300/20", inside: "border-indigo-400/10" }, shadowColor: "shadow-indigo-300/20" },
+  { bg: "#3d1012", bgOverlay: "rgba(61,16,18,0.62)", accent: "#b34444", dim: "rgba(179,68,68,0.22)" },
+  { bg: "#0c1d32", bgOverlay: "rgba(12,29,50,0.62)", accent: "#3872a8", dim: "rgba(56,114,168,0.22)" },
+  { bg: "#0c2c2d", bgOverlay: "rgba(12,44,45,0.62)", accent: "#38989e", dim: "rgba(56,152,158,0.22)" },
+  { bg: "#2d2010", bgOverlay: "rgba(45,32,16,0.62)", accent: "#c49a3c", dim: "rgba(196,154,60,0.22)" },
+  { bg: "#181a1e", bgOverlay: "rgba(24,26,30,0.62)", accent: "#5e6e7c", dim: "rgba(94,110,124,0.22)" },
+  { bg: "#190e32", bgOverlay: "rgba(25,14,50,0.62)", accent: "#7e4ec4", dim: "rgba(126,78,196,0.22)" },
 ];
 
 const getPaletteFromSeed = (seed: string) => {
